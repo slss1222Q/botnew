@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Code Market - Premium Digital Marketplace</title>
+    <style>
+        :root {
+            /* Mavzu 1: Neon Qizil (Default) */
+            --bg-color: #0a0a0f;
+            --panel-bg: #12121a;
+            --primary: #ff2a5f;
+            --primary-glow: rgba(255, 42, 95, 0.4);
+            --text-main: #ffffff;
+            --text-muted: #8e8e9f;
+            --border: #222230;
+            --success: #00ff88;
+            --danger: #ff2a5f;
+        }
+
+        [data-theme="cyber"] {
+            /* Mavzu 2: Kiber Firuza */
+            --bg-color: #03080e;
+            --panel-bg: #09111a;
+            --primary: #00f3ff;
+            --primary-glow: rgba(0, 243, 255, 0.4);
+            --border: #112535;
+        }
+
+        [data-theme="minimalist"] {
+            /* Mavzu 3: Minimalist To'q Oq */
+            --bg-color: #121212;
+            --panel-bg: #1c1c1c;
+            --primary: #e5e5e5;
+            --primary-glow: rgba(229, 229, 229, 0.2);
+            --border: #2d2d2d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+
+        /* --- Utils --- */
+        .hidden { display: none !important; }
+        .text-primary { color: var(--primary); text-shadow: 0 0 8px var(--primary-glow); }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-2 { gap: 10px; } 
+        .gap-4 { gap: 20px; }
+        
+        button {
+            background: transparent; border: 1px solid var(--primary); color: var(--primary);
+            padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold;
+            transition: all 0.2s ease-in-out; text-transform: uppercase; letter-spacing: 1px;
+            font-size: 13px;
+        }
+        button:hover, button.active-btn {
+            background: var(--primary); color: #000;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+        button:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+        
+        input, select, textarea {
+            width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border); color: var(--text-main);
+            border-radius: 8px; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus, select:focus, textarea:focus { 
+            border-color: var(--primary); 
+            box-shadow: 0 0 8px var(--primary-glow); 
+        }
+
+        /* --- Login Screen --- */
+        #login-screen {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 20px;
+            background: radial-gradient(circle at center, var(--panel-bg), var(--bg-color));
+        }
+        .login-box {
+            background: var(--panel-bg); padding: 40px; border-radius: 16px;
+            border: 1px solid var(--border); box-shadow: 0 0 35px rgba(0,0,0,0.7);
+            text-align: center; width: 100%; max-width: 400px;
+            position: relative;
+        }
+        .author-credit {
+            margin-top: 25px; font-size: 14px; font-weight: bold;
+            letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase;
+        }
+
+        /* --- App Layout --- */
+        #app-layout { display: flex; height: 100vh; overflow: hidden; }
+
+        /* --- Navigation --- */
+        nav {
+            background: var(--panel-bg); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; width: 260px; z-index: 100;
+        }
+        .nav-logo {
+            padding: 25px 20px; border-bottom: 1px solid var(--border); display: flex;
+            align-items: center; gap: 15px; font-size: 20px; font-weight: 900; letter-spacing: 1.5px;
+        }
+        
+        /* 2D Spin Animation */
+        .cyber-logo {
+            position: relative; width: 38px; height: 38px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .cyber-logo::before {
+            content: ''; position: absolute; inset: 0;
+            border: 2px dashed var(--primary); border-radius: 50%;
+            animation: spin 5s linear infinite;
+        }
+        .cyber-logo::after {
+            content: ''; position: absolute; inset: 5px;
+            border: 2px solid var(--text-main); border-radius: 50%; border-bottom-color: transparent;
+            animation: spin-reverse 2.5s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+        .cyber-logo span { font-size: 13px; font-weight: 900; color: var(--primary); position: relative; z-index: 2; }
+
+        .nav-links { flex: 1; padding: 20px 0; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+        .nav-link {
+            padding: 14px 20px; display: flex; align-items: center; gap: 12px;
+            cursor: pointer; color: var(--text-muted); transition: 0.2s; font-weight: 500;
+            font-size: 15px;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary); background: rgba(255, 255, 255, 0.03); border-left: 4px solid var(--primary);
+        }
+        .user-balance { padding: 20px; border-top: 1px solid var(--border); text-align: center; }
+
+        /* --- Main Arena --- */
+        main { flex: 1; display: flex; flex-direction: column; position: relative; }
+        .header-bar {
+            padding: 15px 20px; background: var(--panel-bg); border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; gap: 15px;
+        }
+        .search-bar { flex: 1; max-width: 450px; }
+        .page-content { flex: 1; overflow-y: auto; padding: 25px; }
+        
+        #broadcast-banner {
+            background: var(--primary); color: #000; padding: 12px;
+            text-align: center; font-weight: bold; font-size: 14px; box-shadow: 0 2px 10px var(--primary-glow);
+        }
+
+        /* --- Product Cards & Grids --- */
+        .listings-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 20px;
+        }
+        .card {
+            background: var(--panel-bg); border: 1px solid var(--border); border-radius: 14px;
+            overflow: hidden; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; display: flex; flex-direction: column;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px var(--primary-glow); border-color: var(--primary); }
+        .card-img-wrapper { width: 100%; height: 160px; background: #151522; position: relative; overflow: hidden; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; }
+        .card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+        .card-title { font-size: 17px; font-weight: bold; margin-bottom: 6px; line-height: 1.3; }
+        .card-cat { font-size: 11px; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .card-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; flex: 1; line-height: 1.4; }
+        .card-meta { background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.02); }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .card-price { font-size: 20px; font-weight: 800; color: var(--success); }
+        .card-actions { display: flex; gap: 8px; }
+        .card-actions button { flex: 1; padding: 10px; font-size: 12px; }
+        .btn-icon { max-width: 42px; min-width: 42px; height: 42px; padding: 0; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+
+        /* --- Modals --- */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);
+            display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px;
+        }
+        .modal {
+            background: var(--panel-bg); padding: 30px; border-radius: 16px; width: 100%;
+            max-width: 550px; border: 1px solid var(--primary); box-shadow: 0 0 35px var(--primary-glow);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal-header { font-size: 22px; font-weight: bold; margin-bottom: 20px; text-align: center; letter-spacing: 1px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; font-size: 13px; color: var(--text-muted); font-weight: 600; }
+        .calc-info { font-size: 12px; color: var(--success); margin-top: 6px; display: block; font-weight: 500; }
+        
+        .radio-tile-group { display: flex; gap: 10px; }
+        .radio-tile { flex: 1; text-align: center; padding: 10px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .radio-tile.selected { border-color: var(--primary); background: rgba(255,42,95,0.05); color: var(--primary); }
+
+        /* Generic Lists */
+        .list-item {
+            background: var(--panel-bg); border: 1px solid var(--border); padding: 18px;
+            border-radius: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* --- Mobile Responsive Rules --- */
+        @media (max-width: 768px) {
+            #app-layout { flex-direction: column; }
+            nav { width: 100%; border-right: none; border-top: 1px solid var(--border); flex-direction: row; order: 2; height: 68px; }
+            .nav-logo, .user-balance { display: none; }
+            .nav-links { flex-direction: row; justify-content: space-around; padding: 0; align-items: center; }
+            .nav-link { flex-direction: column; gap: 4px; padding: 8px 10px; border-left: none; font-size: 10px; text-align: center; flex: 1; }
+            .nav-link.active { border-left: none; border-bottom: 3px solid var(--primary); background: transparent; }
+            main { order: 1; height: calc(100vh - 68px); }
+            .header-bar { flex-direction: column; padding: 12px; gap: 8px; }
+            .search-bar { width: 100%; max-width: 100%; }
+            .mobile-balance-badge { display: block !important; background: rgba(0,255,136,0.1); border: 1px solid var(--success); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; color: var(--success); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="cyber-logo" style="width:65px; height:65px; margin: 0 auto 20px auto;">
+                <span>CM</span>
+            </div>
+            <h1 class="text-primary" style="margin-bottom: 8px; font-size: 30px; letter-spacing: 1px;">CODE MARKET</h1>
+            <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 13px;">Raqamli kodlar va skriptlar dunyosiga xush kelibsiz</p>
+            
+            <input type="text" id="login-nickname" placeholder="@username kiriting" style="margin-bottom: 18px; text-align: center; font-size: 16px; letter-spacing: 0.5px;" onkeypress="if(event.key === 'Enter') app.processLogin()">
+            <button onclick="app.processLogin()" style="width: 100%; padding: 14px; font-size: 15px;" class="active-btn">Kirish / Ro'yxatdan o'tish</button>
+            
+            <div class="author-credit">By Mironshoh</div>
+        </div>
+    </div>
+
+    <div id="app-layout" class="hidden">
+        
+        <nav id="navbar">
+            <div class="nav-logo">
+                <div class="cyber-logo"><span>CM</span></div>
+                <span class="text-primary">CODE MARKET</span>
+            </div>
+            <div class="nav-links">
+                <div class="nav-link active" onclick="app.navigate('home')"><span>🏠</span> Asosiy</div>
+                <div class="nav-link" onclick="app.navigate('new')"><span>🔥</span> Yangi Kodlar</div>
+                <div class="nav-link" onclick="app.navigate('categories')"><span>📁</span> Kategoriya</div>
+                <div class="nav-link" onclick="app.navigate('cart')"><span>🛒</span> Savat (<span id="cart-count">0</span>)</div>
+                <div class="nav-link" onclick="app.navigate('profile')"><span>👤</span> Profilim</div>
+                <div class="nav-link" onclick="app.navigate('settings')"><span>⚙         </span> Sozlamalar</div>
+                <div class="nav-link text-primary hidden" id="nav-admin" onclick="app.navigate('admin')"><span>👑</span> Admin Panel</div>
+            </div>
+            <div class="user-balance">
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Sizning balansingiz:</p>
+                <h2 class="text-primary" id="sidebar-balance" style="font-size: 22px;">0 Coin</h2>
+                <button onclick="app.openListingModal()" style="width: 100%; margin-top: 15px; font-size: 11px;" class="active-btn">+ E'lon Joylash</button>
+            </div>
+        </nav>
+
+        <main>
+            <div id="broadcast-banner" class="hidden"></div>
+            
+            <div class="header-bar">
+                <div class="flex items-center justify-between" style="width: 100%; max-width: 200px; min-width: auto;">
+                    <h2 id="page-title" style="font-size: 18px; font-weight: 800; letter-spacing: 0.5px;">BOSH SAHIFA</h2>
+                    <div class="mobile-balance-badge" style="display: none;"><span id="mobile-bal-val">0</span> 🪙</div>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="global-search" placeholder="Skript, bot yoki loyihalarni qidirish..." onkeyup="app.triggerSearch()">
+                </div>
+                <div class="desktop-action-zone" style="display:block;">
+                    <button onclick="app.openListingModal()" id="mobile-add-btn" style="display:none; padding: 8px 12px; font-size: 11px;">+ E'lon</button>
+                </div>
+            </div>
+
+            <div class="page-content" id="content-area">
+                </div>
+        </main>
+    </div>
+
+    <div id="modal-add" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header text-primary">YANGI RAQAMLI E'LON JOYLASHTIRISH</div>
+            
+            <div class="form-group">
+                <label>Skript / Kod Nomi *</label>
+                <input type="text" id="add-title" placeholder="Masalan: Telegram Premium Auto-Bot">
+            </div>
+            
+            <div class="form-group flex gap-4">
+                <div style="flex: 1;">
+                    <label>Mukammal Kategoriya *</label>
+                    <select id="add-cat">
+                        <option value="bot">🤖 Telegram Botlar</option>
+                        <option value="site">🌐 Web Saytlar</option>
+                        <option value="mobile">📱 Mobil Ilovalar</option>
+                        <option value="game">🎮 O'yin Skriptlari</option>
+                        <option value="module">🛠 Modullar & API</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label>Narx turi *</label>
+                    <div class="radio-tile-group">
+                        <div class="radio-tile selected" id="tile-fixed" onclick="app.setPriceType('fixed')">Qat'iy</div>
+                        <div class="radio-tile" id="tile-nego" onclick="app.setPriceType('nego')">Kelishiladi</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Asosiy Narx (Coin) *</label>
+                <input type="number" id="add-price" placeholder="Masalan: 15" oninput="app.calculateTax()">
+                <span class="calc-info" id="tax-notice">Xaridor ko'radigan yakuniy narx: 0 Coin (Tizim komissiyasi: +6%)</span>
+            </div>
+
+            <div class="form-group flex gap-4">
+                <div style="flex:1;">
+                    <label>Telegram Username *</label>
+                    <input type="text" id="add-tg" placeholder="@Mironshoh_Dev">
+                </div>
+                <div style="flex:1;">
+                    <label>Telefon Raqam *</label>
+                    <input type="text" id="add-phone" placeholder="+998901234567">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Kod taqdim etish usuli *</label>
+                <select id="add-delivery-type" onchange="app.toggleDeliveryFields()">
+                    <option value="link">GitHub yoki Yuklab olish havolasi (Link)</option>
+                    <option value="raw">Skript kodini to'liq joylash (Copy-Paste)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="delivery-link-wrapper">
+                <label>GitHub yoki Yuklab olish havolasi</label>
+                <input type="text" id="add-link" placeholder="https://github.com/user/repo">
+            </div>
+
+            <div class="form-group hidden" id="delivery-raw-wrapper">
+                <label>Skript kodi (Raw Code Text)</label>
+                <textarea id="add-raw-code" rows="5" placeholder="Sotib olingandan keyin nusxalash uchun to'liq kod strukturasi..." style="font-family: monospace; font-size:12px;"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Mahsulot Muqova Rasmi (Fayl Yuklash) *</label>
+                <input type="file" id="add-file-img" accept="image/*" style="padding:8px;">
+            </div>
+
+            <div class="form-group">
+                <label>Batafsil Tavsif *</label>
+                <textarea id="add-desc" rows="3" placeholder="Skript qanday funksiyalarga ega, qaysi dasturlash tilida yozilgan..."></textarea>
+            </div>
+
+            <div class="flex gap-2" style="margin-top: 25px;">
+                <button style="flex: 1; border-color: var(--text-muted); color: var(--text-muted);" onclick="app.closeModal('modal-add')">Bekor Qilish</button>
+                <button style="flex: 1;" class="active-btn" onclick="app.executePublish()">Bozorga Chiqarish</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// --- CORE BUSINESS LOGIC (LOCALSTORAGE ENGINE) ---
+
+const DB_KEY = 'codeMarket_v5_DB';
+
+// Tizim boshlang'ich holatda mutlaqo bo'sh bo'ladi (Hech qanday dummy e'lonlarsiz)
+const initialBlankDB = {
+    users: {
+        'admin': { balance: 1000, purchases: [], cart: [], myListings: [], isBlocked: false, theme: 'neon' }
+    },
+    listings: [],
+    stats: { totalTurnover: 0 },
+    broadcast: ""
+};
+
+const app = {
+    db: {},
+    currentUser: null,
+    currentTab: 'home',
+    selectedPriceType: 'fixed',
+
+    init() {
+        const rawData = localStorage.getItem(DB_KEY);
+        if (rawData) {
+            app.db = JSON.parse(rawData);
+        } else {
+            app.db = JSON.parse(JSON.stringify(initialBlankDB));
+            app.saveState();
+        }
+
+        // Sessiyani tekshirish
+        const activeSession = sessionStorage.getItem('cm_active_user');
+        if (activeSession && app.db.users[activeSession]) {
+            app.currentUser = activeSession;
+            app.applySelectedTheme(app.db.users[activeSession].theme || 'neon');
+            app.bootApplication();
+        } else {
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        // Mobil moslashuvni tekshirish
+        if (window.innerWidth <= 768) {
+            document.getElementById('mobile-add-btn').style.display = 'block';
+        }
+    },
+
+    saveState() {
+        localStorage.setItem(DB_KEY, JSON.stringify(app.db));
+    },
+
+    processLogin() {
+        const nickInput = document.getElementById('login-nickname');
+        const username = nickInput.value.trim().toLowerCase().replace('@', '');
+
+        if (username.length < 3) {
+            alert("Nickname xato! Kamida 3 ta belgidan iborat bo'lishi lozim.");
+            return;
+        }
+
+        if (!app.db.users[username]) {
+            // Yangi foydalanuvchiga ro'yxatdan o'tgani uchun aniq 10 Coin bonus beriladi
+            app.db.users[username] = {
+                balance: 10,
+                purchases: [],
+                cart: [],
+                myListings: [],
+                isBlocked: false,
+                theme: 'neon'
+            };
+            app.saveState();
+            alert(`Xush kelibsiz! Yangi hisob yaratildi va balansga 10 Coin bonus qo'shildi!`);
+        } else if (app.db.users[username].isBlocked) {
+            alert("Ushbu foydalanuvchi tizim ma'muri (Admin) tomonidan bloklangan!");
+            return;
+        }
+
+        app.currentUser = username;
+        sessionStorage.setItem('cm_active_user', username);
+        app.applySelectedTheme(app.db.users[username].theme);
+        app.bootApplication();
+    },
+
+    bootApplication() {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('app-layout').classList.remove('hidden');
+        
+        if (app.currentUser === 'admin') {
+            document.getElementById('nav-admin').classList.remove('hidden');
+        } else {
+            document.getElementById('nav-admin').classList.add('hidden');
+        }
+
+        app.refreshGlobalMetrics();
+        app.navigate('home');
+    },
+
+    logout() {
+        sessionStorage.removeItem('cm_active_user');
+        app.currentUser = null;
+        document.getElementById('app-layout').classList.add('hidden');
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('login-nickname').value = '';
+    },
+
+    refreshGlobalMetrics() {
+        const profile = app.db.users[app.currentUser];
+        document.getElementById('sidebar-balance').innerText = profile.balance + ' Coin';
+        document.getElementById('mobile-bal-val').innerText = profile.balance;
+        document.getElementById('cart-count').innerText = profile.cart.length;
+
+        const banner = document.getElementById('broadcast-banner');
+        if (app.db.broadcast && app.db.broadcast.length > 0) {
+            banner.innerText = "📢 E'LON: " + app.db.broadcast;
+            banner.classList.remove('hidden');
+        } else {
+            banner.classList.add('hidden');
+        }
+    },
+
+    navigate(tab) {
+        app.currentTab = tab;
+        
+        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+        const matchedLink = Array.from(document.querySelectorAll('.nav-link')).find(el => el.getAttribute('onclick').includes(`'${tab}'`));
+        if (matchedLink) matchedLink.classList.add('active');
+
+        const titleMap = {
+            'home': 'BOSH SAHIFA',
+            'new': '🔥 YANGI KODLAR',
+            'categories': '📁 KATEGORIYALAR',
+            'cart': '🛒 SAVATIM',
+            'profile': '👤 PROFIL TARIXI',
+            'settings': '⚙️ SOZLAMALAR',
+            'admin': '👑 ADMIN STRUKTURASI'
+        };
+        document.getElementById('page-title').innerText = titleMap[tab] || 'MARKET';
+        app.buildTabContent(tab);
+    },
+
+    buildTabContent(tab) {
+        const stage = document.getElementById('content-area');
+        stage.innerHTML = '';
+
+        switch (tab) {
+            case 'home':
+                stage.innerHTML = app.compileGrid(app.db.listings);
+                break;
+            case 'new':
+                // Eng oxirgi yuklangan 5 ta mahsulot ro'yxati
+                const freshList = [...app.db.listings].sort((a,b) => b.timestamp - a.timestamp).slice(0, 5);
+                stage.innerHTML = app.compileGrid(freshList);
+                break;
+            case 'categories':
+                stage.innerHTML = `
+                    <div class="flex gap-2" style="overflow-x:auto; padding-bottom:10px; margin-bottom: 20px;">
+                        <button onclick="app.switchCategoryView('bot', this)" class="active-btn">🤖 Botlar</button>
+                        <button onclick="app.switchCategoryView('site', this)">🌐 Saytlar</button>
+                        <button onclick="app.switchCategoryView('mobile', this)">📱 Ilovalar</button>
+                        <button onclick="app.switchCategoryView('game', this)">🎮 O'yinlar</button>
+                        <button onclick="app.switchCategoryView('module', this)">🛠 Modullar</button>
+                    </div>
+                    <div id="category-segmented-stage"></div>
+                `;
+                app.switchCategoryView('bot', document.querySelector('#content-area button'));
+                break;
+            case 'cart':
+                const userCart = app.db.users[app.currentUser].cart;
+                const itemsInCart = app.db.listings.filter(l => userCart.includes(l.id));
+                if(itemsInCart.length === 0) {
+                    stage.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:40px;">Savatingiz hozircha bo'sh.</p>`;
+                } else {
+                    let totalCartCost = itemsInCart.reduce((acc, obj) => acc + obj.buyerFinalPrice, 0);
+                    stage.innerHTML = `
+                        <div style="background: rgba(255,42,95,0.06); border:1px solid var(--primary); padding:15px; border-radius:10px; margin-bottom:20px;">
+                            <h3>Savatdagi jami xarid qiymati: <span class="text-primary">${totalCartCost} Coin</span></h3>
+                        </div>
+                        ${app.compileGrid(itemsInCart)}
+                    `;
+                }
+                break;
+            case 'profile':
+                const usr = app.db.users[app.currentUser];
+                const boughtItems = app.db.listings.filter(l => usr.purchases.includes(l.id));
+                const uploadedItems = app.db.listings.filter(l => l.owner === app.currentUser);
+
+                stage.innerHTML = `
+                    <div style="background:var(--panel-bg); border:1px solid var(--border); padding:20px; border-radius:12px; margin-bottom:25px;">
+                        <h3>Foydalanuvchi: <span class="text-primary">@${app.currentUser}</span></h3>
+                        <p style="color:var(--text-muted); margin-top:5px;">Joriy balans: <b>${usr.balance} Coin</b></p>
+                    </div>
+                    
+                    <h3 style="margin-top:15px; border-left:3px solid var(--success); padding-left:10px;">📥 SOTIB OLINGAN SKRIPTLAR (${boughtItems.length})</h3>
+                    <div style="margin-bottom:30px; margin-top:15px;">
+                        ${boughtItems.length > 0 ? boughtItems.map(item => `
+                            <div class="list-item flex-col items-start gap-2">
+                                <div class="flex justify-between" style="width:100%;">
+                                    <b class="text-primary" style="font-size:16px;">${item.title}</b>
+                                    <span style="color:var(--success); font-weight:bold;">Sotib olindi</span>
+                                </div>
+                                <p style="font-size:12px; color:var(--text-muted);">Sotuvchi aloqa: ${item.tgUsername} | Tel: ${item.phoneNumber}</p>
+                                
+                                <div style="width:100%; margin-top:8px; padding-top:8px; border-top:1px dashed var(--border);">
+                                    ${item.deliveryMode === 'link' 
+                                        ? `<a href="${item.sourceLink}" target="_blank" style="color:var(--success); font-size:13px; text-decoration:none; font-weight:bold;">📂 GitHub / Yuklab olish havolasiga o'tish →</a>`
+                                        : `<label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px;">Skript kodi:</label>
+                                           <textarea readonly style="font-family:monospace; font-size:11px; height:80px; background:#000;" onclick="this.select()">${item.sourceRawCode}</textarea>`
+                                    }
+                                </div>
+                            </div>
+                        `).join('') : '<p style="color:var(--text-muted); font-size:13px; padding:10px 0;">Siz hali skript xarid qilmadingiz.</p>'}
+                    </div>
+
+                    <h3 style="border-left:3px solid var(--primary); padding-left:10px;">📤 MENING E'LONLARIM (${uploadedItems.length})</h3>
+                    ${app.compileGrid(uploadedItems)}
+                `;
+                break;
+            case 'settings':
+                stage.innerHTML = `
+                    <div style="max-width:480px; margin: 0 auto;">
+                        <h3 style="margin-bottom:15px;">Tizim Neon Dizayn Mavzusi</h3>
+                        <div class="flex flex-col gap-2" style="margin-bottom:30px;">
+                            <button onclick="app.updateTheme('neon')" class="active-btn" style="background:#ff2a5f; color:#000; border:none;">Mavzu 1: Neon Qizil</button>
+                            <button onclick="app.updateTheme('cyber')" style="background:#00f3ff; color:#000; border:none;">Mavzu 2: Kiber Firuza</button>
+                            <button onclick="app.updateTheme('minimalist')" style="background:#e5e5e5; color:#000; border:none;">Mavzu 3: Minimalist To'q Oq</button>
+                        </div>
+                        <div style="border-top:1px solid var(--border); padding-top:20px;">
+                            <button onclick="app.logout()" style="width:100%; border-color:var(--danger); color:var(--danger);">Tizimdan Butunlay Chiqish</button>
+                        </div>
+                    </div>
+                `;
+                break;
+            case 'admin':
+                if(app.currentUser !== 'admin') return;
+                stage.innerHTML = `
+                    <div class="flex gap-4" style="margin-bottom:25px;">
+                        <div style="flex:1; background:var(--panel-bg); padding:15px; border-radius:10px; border:1px solid var(--border);">
+                            <span style="font-size:12px; color:var(--text-muted);">Jami Ro'yxatdan o'tganlar</span>
+                            <h2>${Object.keys(app.db.users).length} ta user</h2>
+                        </div>
+                        <div style="flex:1; background:var(--panel-bg); padding:15px; border-radius:10px; border:1px solid var(--border);">
+                            <span style="font-size:12px; color:var(--text-muted);">Faol E'lonlar</span>
+                            <h2>${app.db.listings.length} ta kod</h2>
+                        </div>
+                        <div style="flex:1; background:var(--panel-bg); padding:15px; border-radius:10px; border:1px solid var(--primary);">
+                            <span style="font-size:12px; color:var(--text-muted);">Umumiy Aylanma</span>
+                            <h2 class="text-primary">${app.db.stats.totalTurnover} Coin</h2>
+                        </div>
+                    </div>
+
+                    <div style="background:var(--panel-bg); border:1px solid var(--border); padding:20px; border-radius:12px; margin-bottom:20px;">
+                        <h3>💰 Foydalanuvchilar Balansini va Holatini Boshqarish</h3>
+                        <div class="flex flex-col gap-2" style="margin-top:12px;">
+                            <input type="text" id="adm-target-user" placeholder="User nickname (masalan: mironshoh)">
+                            <input type="number" id="adm-amount" placeholder="Coin miqdori (ayirish uchun minus belgisidan foydalaning)">
+                            <div class="flex gap-2">
+                                <button onclick="app.admModifyWallet()" style="flex:1;" class="active-btn">Balansni Yangilash</button>
+                                <button onclick="app.admToggleBlock()" style="flex:1; border-color:var(--danger); color:var(--danger);">Bloklash / Ochish</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background:var(--panel-bg); border:1px solid var(--border); padding:20px; border-radius:12px;">
+                        <h3>📢 Global Broadcast Banner o'rnatish</h3>
+                        <div class="flex gap-2" style="margin-top:12px;">
+                            <input type="text" id="adm-banner-msg" placeholder="Banner matni..." value="${app.db.broadcast}">
+                            <button onclick="app.admPublishBroadcast()" class="active-btn">E'lon Berish</button>
+                        </div>
+                    </div>
+                `;
+                break;
+        }
+    },
+
+    compileGrid(items) {
+        if (!items || items.length === 0) {
+            return `<div style="width:100%; text-align:center; padding:50px 0; color:var(--text-muted);">Siz qidirayotgan bo'limda hozircha hech qanday e'lon mavjud emas.</div>`;
+        }
+
+        let codeBlock = `<div class="listings-grid">`;
+        items.forEach(el => {
+            const hasInCart = app.db.users[app.currentUser].cart.includes(el.id);
+            const clearPurchase = app.db.users[app.currentUser].purchases.includes(el.id);
+            const stateOwner = el.owner === app.currentUser || app.currentUser === 'admin';
+            const catEmoji = el.category === 'bot' ? '🤖' : el.category === 'site' ? '🌐' : el.category === 'mobile' ? '📱' : el.category === 'game' ? '🎮' : '🛠';
+
+            codeBlock += `
+                <div class="card">
+                    <div class="card-img-wrapper">
+                        <img src="${el.base64Img}" class="card-img" onerror="this.src='https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=400&q=80'">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-cat">${catEmoji} ${el.category}</div>
+                        <div class="card-title">${el.title}</div>
+                        <div class="card-desc">${el.desc.substring(0, 75)}...</div>
+                        
+                        <div class="card-meta">
+                            Sotuvchi: @${el.owner}<br>
+                            Tel: ${el.phoneNumber}<br>
+                            Turi: ${el.priceStyle === 'fixed' ? '🔒 Qat\'iy Narx' : '🤝 Kelishiladi'}
+                        </div>
+
+                        <div class="card-footer">
+                            <span class="card-price">${el.buyerFinalPrice} Coin</span>
+                        </div>
+
+                        <div class="card-actions">
+                            ${clearPurchase 
+                                ? `<button style="flex:2; border-color:var(--success); color:var(--success);" onclick="app.navigate('profile')">Yuklab Olish</button>`
+                                : `<button class="active-btn" style="flex:2;" onclick="app.triggerPurchase(${el.id})">Sotib olish</button>`
+                            }
+                            <button class="btn-icon" onclick="app.cartToggle(${el.id})" style="${hasInCart ? 'background:var(--primary); color:#000;' : ''}">
+                                ${hasInCart ? '🗑' : '🛒'}
+                            </button>
+                            ${stateOwner ? `<button class="btn-icon" style="border-color:var(--danger); color:var(--danger);" onclick="app.removeListing(${el.id})">✖</button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        codeBlock += `</div>`;
+        return codeBlock;
+    },
+
+    switchCategoryView(categoryKey, btnElement) {
+        const parent = btnElement.parentElement;
+        parent.querySelectorAll('button').forEach(b => b.classList.remove('active-btn'));
+        btnElement.classList.add('active-btn');
+
+        const targetedListings = app.db.listings.filter(l => l.category === categoryKey);
+        document.getElementById('category-segmented-stage').innerHTML = app.compileGrid(targetedListings);
+    },
+
+    triggerSearch() {
+        const query = document.getElementById('global-search').value.toLowerCase().trim();
+        if(app.currentTab !== 'home') app.navigate('home');
+
+        if(query.length < 2) {
+            app.buildTabContent('home');
+            return;
+        }
+
+        const standardResult = app.db.listings.filter(l => 
+            l.title.toLowerCase().includes(query) || 
+            l.desc.toLowerCase().includes(query) ||
+            l.owner.toLowerCase().includes(query)
+        );
+        document.getElementById('content-area').innerHTML = app.compileGrid(standardResult);
+    },
+
+    // --- DIALOG MODAL MEXANIZMI ---
+    openListingModal() {
+        document.getElementById('modal-add').classList.remove('hidden');
+        document.getElementById('add-title').value = '';
+        document.getElementById('add-price').value = '';
+        document.getElementById('add-tg').value = '';
+        document.getElementById('add-phone').value = '';
+        document.getElementById('add-link').value = '';
+        document.getElementById('add-raw-code').value = '';
+        document.getElementById('add-file-img').value = '';
+        document.getElementById('add-desc').value = '';
+        document.getElementById('tax-notice').innerText = "Xaridor ko'radigan yakuniy narx: 0 Coin (Tizim komissiyasi: +6%)";
+        app.setPriceType('fixed');
+    },
+
+    closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+    },
+
+    setPriceType(type) {
+        app.selectedPriceType = type;
+        if(type === 'fixed') {
+            document.getElementById('tile-fixed').classList.add('selected');
+            document.getElementById('tile-nego').classList.remove('selected');
+        } else {
+            document.getElementById('tile-nego').classList.add('selected');
+            document.getElementById('tile-fixed').classList.remove('selected');
+        }
+    },
+
+    toggleDeliveryFields() {
+        const option = document.getElementById('add-delivery-type').value;
+        if(option === 'link') {
+            document.getElementById('delivery-link-wrapper').classList.remove('hidden');
+            document.getElementById('delivery-raw-wrapper').classList.add('hidden');
+        } else {
+            document.getElementById('delivery-link-wrapper').classList.add('hidden');
+            document.getElementById('delivery-raw-wrapper').classList.remove('hidden');
+        }
+    },
+
+    calculateTax() {
+        const rawNum = parseInt(document.getElementById('add-price').value) || 0;
+        // Matematik 6% avto-komissiya hisoblash formulasi
+        const combinedNum = Math.ceil(rawNum * 1.06);
+        document.getElementById('tax-notice').innerText = `Xaridor ko'radigan yakuniy narx: ${combinedNum} Coin (Tizim komissiyasi: +6%)`;
+    },
+
+    executePublish() {
+        const title = document.getElementById('add-title').value.trim();
+        const category = document.getElementById('add-cat').value;
+        const basePrice = parseInt(document.getElementById('add-price').value);
+        const tgUsername = document.getElementById('add-tg').value.trim();
+        const phoneNumber = document.getElementById('add-phone').value.trim();
+        const deliveryMode = document.getElementById('add-delivery-type').value;
+        const sourceLink = document.getElementById('add-link').value.trim();
+        const sourceRawCode = document.getElementById('add-raw-code').value.trim();
+        const imageFile = document.getElementById('add-file-img').files[0];
+        const desc = document.getElementById('add-desc').value.trim();
+
+        if (!title || !basePrice || !tgUsername || !phoneNumber || !desc) {
+            alert("Iltimos, barcha majburiy yulduzcha (*) belgili maydonlarni to'ldiring!");
+            return;
+        }
+
+        if (deliveryMode === 'link' && !sourceLink) {
+            alert("Iltimos, loyihaga tegishli GitHub yoki yuklab olish havolasini kiriting!");
+            return;
+        }
+        if (deliveryMode === 'raw' && !sourceRawCode) {
+            alert("Iltimos, skript kodini matn maydoniga to'liq nusxalab joylang!");
+            return;
+        }
+
+        const buyerFinalPrice = Math.ceil(basePrice * 1.06);
+
+        const buildObjectAndSave = (base64String) => {
+            const newObject = {
+                id: Date.now(),
+                title, category, priceStyle: app.selectedPriceType, basePrice, buyerFinalPrice,
+                tgUsername, phoneNumber, deliveryMode, sourceLink, sourceRawCode,
+                base64Img: base64String || '', desc, owner: app.currentUser, timestamp: Date.now()
+            };
+
+            app.db.listings.unshift(newObject);
+            app.db.users[app.currentUser].myListings.push(newObject.id);
+            app.saveState();
+            app.closeModal('modal-add');
+            app.refreshGlobalMetrics();
+            app.navigate('home');
+            alert("E'loningiz muvaffaqiyatli tekshirildi va bozor platformasiga joylashtirildi!");
+        };
+
+        // Rasmni local Base64 formatga o'tkazish mantiqi
+        if (imageFile) {
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                buildObjectAndSave(reader.result);
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            buildObjectAndSave('');
+        }
+    },
+
+    triggerPurchase(id) {
+        const targetObj = app.db.listings.find(l => l.id === id);
+        if(!targetObj) return;
+
+        if(targetObj.owner === app.currentUser) {
+            alert("O'zingiz joylagan mahsulotni o'zingiz sotib ololmaysiz!");
+            return;
+        }
+
+        const client = app.db.users[app.currentUser];
+        if(client.purchases.includes(id)) {
+            alert("Siz bu skriptni avval xarid qilgansiz! Yuklab olish 'Profilim' bo'limida faol.");
+            return;
+        }
+
+        if (client.balance < targetObj.buyerFinalPrice) {
+            alert(`Mablag' yetarli emas! Sizga yana ${targetObj.buyerFinalPrice - client.balance} Coin kerak.`);
+            return;
+        }
+
+        if (confirm(`"${targetObj.title}" mahsulotini ${targetObj.buyerFinalPrice} Coin evaziga sotib olishni tasdiqlaysizmi?`)) {
+            // Balansdan yechish va sotuvchiga o'tkazish
+            client.balance -= targetObj.buyerFinalPrice;
+            client.purchases.push(id);
+
+            if (app.db.users[targetObj.owner]) {
+                app.db.users[targetObj.owner].balance += targetObj.basePrice; 
+            }
+
+            // Global tizim aylanmasiga qo'shish
+            app.db.stats.totalTurnover += targetObj.buyerFinalPrice;
+            
+            // Savatdan tozalash
+            client.cart = client.cart.filter(cId => cId !== id);
+
+            app.saveState();
+            app.refreshGlobalMetrics();
+            app.navigate('profile');
+            alert("Tabriklaymiz! Xarid yakunlandi. Kod va havolalar profilingizda ochildi.");
+        }
+    },
+
+    cartToggle(id) {
+        const user = app.db.users[app.currentUser];
+        const insideIndex = user.cart.indexOf(id);
+        if (insideIndex === -1) {
+            user.cart.push(id);
+        } else {
+            user.cart.splice(insideIndex, 1);
+        }
+        app.saveState();
+        app.refreshGlobalMetrics();
+        app.buildTabContent(app.currentTab);
+    },
+
+    removeListing(id) {
+        if (confirm("Ushbu raqamli e'lonni butunlay o'chirib tashlamoqchimisiz?")) {
+            app.db.listings = app.db.listings.filter(l => l.id !== id);
+            app.saveState();
+            app.refreshGlobalMetrics();
+            app.buildTabContent(app.currentTab);
+        }
+    },
+
+    // --- ADMIN MANTIQLARI ---
+    admModifyWallet() {
+        const target = document.getElementById('adm-target-user').value.toLowerCase().trim();
+        const cash = parseInt(document.getElementById('adm-amount').value);
+
+        if(!app.db.users[target]) { alert("Bunday foydalanuvchi tizimda topilmadi!"); return; }
+        if(isNaN(cash)) { alert("Iltimos, coin miqdorini raqamda kiriting!"); return; }
+
+        app.db.users[target].balance += cash;
+        app.saveState();
+        app.refreshGlobalMetrics();
+        app.buildTabContent('admin');
+        alert(`@${target} foydalanuvchi balansi muvaffaqiyatli yangilandi!`);
+    },
+
+    admToggleBlock() {
+        const target = document.getElementById('adm-target-user').value.toLowerCase().trim();
+        if(!app.db.users[target]) { alert("Foydalanuvchi topilmadi!"); return; }
+        if(target === 'admin') { alert("Admin o'zini o'zi bloklay olmaydi!"); return; }
+
+        const currentState = app.db.users[target].isBlocked;
+        app.db.users[target].isBlocked = !currentState;
+        app.saveState();
+        alert(`@${target} holati o'zgartirildi. Blok holati: ${!currentState}`);
+    },
+
+    admPublishBroadcast() {
+        const text = document.getElementById('adm-banner-msg').value.trim();
+        app.db.broadcast = text;
+        app.saveState();
+        app.refreshGlobalMetrics();
+        alert("Global xabar barcha ekranlarda e'lon qilindi!");
+    },
+
+    // --- MAVZULAR BILAN ISHLASH ---
+    updateTheme(themeName) {
+        app.db.users[app.currentUser].theme = themeName;
+        app.saveState();
+        app.applySelectedTheme(themeName);
+    },
+
+    applySelectedTheme(themeName) {
+        document.documentElement.setAttribute('data-theme', themeName);
+    }
+};
+
+// Ilovani xavfsiz yuklash buyrug'i
+document.addEventListener('DOMContentLoaded', app.init);
+</script>
+</body>
+</html>
