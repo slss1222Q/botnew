@@ -3,81 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Crash Pro - @smart_gemini</title>
+    <title>Aviator 1xPro - @smart_gemini</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap');
-        body { font-family: 'Rajdhani', sans-serif; background-color: #0c0d14; }
+        
+        /* 1xBet style dark theme */
+        body { font-family: 'Rajdhani', sans-serif; background-color: #0b111d; }
+        .bg-1x-dark { background-color: #141b2d; }
+        .bg-1x-panel { background-color: #1a233a; }
+        .border-1x { border-color: #273452; }
+        
         .font-digital { font-family: 'Orbitron', sans-serif; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        @keyframes pulse-red {
-            0%, 100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 8px rgba(239,68,68,0.8)); }
-            50% { transform: scale(1.05); opacity: 0.8; filter: drop-shadow(0 0 15px rgba(239,68,68,1)); }
-        }
-        .plane-glow { animation: pulse-red 2s infinite; transition: all 0.1s linear; }
         
-        /* Aviator Flight Graph Line Simulation */
+        /* Blue/Cyan animations */
+        @keyframes pulse-cyan {
+            0%, 100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.8)); }
+            50% { transform: scale(1.05); opacity: 0.8; filter: drop-shadow(0 0 15px rgba(34, 211, 238, 1)); }
+        }
+        .plane-glow { animation: pulse-cyan 2s infinite; transition: all 0.1s linear; }
+        
         .flight-curve {
             position: absolute;
             left: 0;
             bottom: 0;
-            background: linear-gradient(to top right, rgba(239,68,68,0.1), transparent);
-            border-top: 2px solid rgba(239,68,68,0.4);
-            border-right: 2px solid rgba(239,68,68,0.4);
+            background: linear-gradient(to top right, rgba(34, 211, 238, 0.15), transparent);
+            border-top: 2px solid rgba(34, 211, 238, 0.6);
+            border-right: 2px solid rgba(34, 211, 238, 0.6);
             border-top-right-radius: 100%;
             transform-origin: bottom left;
             transition: all 0.1s linear;
         }
+
+        /* Toggle Switch CSS */
+        .toggle-checkbox:checked { right: 0; border-color: #10B981; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #10B981; }
+        .toggle-checkbox { right: 4px; z-index: 1; border-color: #4B5563; transition: all 0.3s; }
+        .toggle-label { background-color: #374151; border-radius: 9999px; transition: all 0.3s; }
     </style>
 </head>
 <body class="text-slate-200 min-h-screen flex flex-col unselected overflow-x-hidden">
 
     <!-- AVTO-KIRISH (AUTH) OYNASI -->
-    <div id="auth-screen" class="fixed inset-0 bg-[#0c0d14] z-50 flex items-center justify-center p-4">
-        <div class="bg-[#141622] w-full max-w-md rounded-2xl p-6 border border-red-500/20 shadow-2xl shadow-red-500/5 space-y-5">
+    <div id="auth-screen" class="fixed inset-0 bg-[#0b111d] z-50 flex items-center justify-center p-4">
+        <div class="bg-1x-dark w-full max-w-md rounded-2xl p-6 border border-1x shadow-2xl shadow-blue-900/20 space-y-5">
             <div class="text-center space-y-2">
-                <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white text-2xl mx-auto shadow-lg shadow-red-600/30">
-                    <i class="fa-solid fa-plane-up"></i>
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-3xl mx-auto shadow-lg shadow-blue-600/40">
+                    <i class="fa-solid fa-plane-departure"></i>
                 </div>
-                <h2 class="text-2xl font-bold tracking-wider text-white">AVIATOR BOT</h2>
-                <p class="text-xs text-slate-400">@smart_gemini tizimiga xush kelibsiz</p>
+                <h2 class="text-2xl font-bold tracking-wider text-white">1xAVIATOR PRO</h2>
+                <p class="text-xs text-cyan-400">@smart_gemini tizimiga xush kelibsiz</p>
             </div>
             
             <div class="space-y-4">
                 <div>
                     <label class="text-xs text-slate-400 font-bold uppercase block mb-1">Ismingiz yoki Admin Kodu</label>
-                    <input type="text" id="auth-name" placeholder="Ismingizni kiriting..." class="w-full bg-[#1b1e30] border border-slate-750 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-red-500 transition">
+                    <input type="text" id="auth-name" placeholder="Ismingizni kiriting..." class="w-full bg-1x-panel border border-1x rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-cyan-500 transition">
                 </div>
                 <div>
                     <label class="text-xs text-slate-400 font-bold uppercase block mb-1">Telefon Raqamingiz</label>
-                    <input type="text" id="auth-phone" value="+998" class="w-full bg-[#1b1e30] border border-slate-750 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-red-500 transition">
+                    <input type="text" id="auth-phone" value="+998" class="w-full bg-1x-panel border border-1x rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-cyan-500 transition">
                 </div>
             </div>
 
-            <button onclick="processAuth()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-600/20 transition text-sm tracking-wider">O'YINNI BOSHLASH</button>
+            <button onclick="processAuth()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-600/30 transition text-sm tracking-wider">TIZIMGA KIRISH</button>
         </div>
     </div>
 
     <!-- ASOSIY DASTUR -->
     <div id="main-app" class="hidden flex-1 flex flex-col pb-24">
-        <header class="bg-[#141622] border-b border-slate-800 sticky top-0 z-40">
+        <header class="bg-1x-dark border-b border-1x sticky top-0 z-40">
             <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-red-900/30 border border-red-500/30 rounded-lg flex items-center justify-center text-red-500 font-bold">
+                    <div class="w-10 h-10 bg-blue-900/40 border border-blue-500/40 rounded-lg flex items-center justify-center text-cyan-400 font-bold">
                         <i class="fa-solid fa-user-astronaut"></i>
                     </div>
                     <div>
                         <h1 class="text-sm font-bold text-white leading-tight flex items-center gap-1" id="user-display-name">
                             Foydalanuvchi
                         </h1>
-                        <p class="text-[11px] text-amber-500 font-bold" id="user-display-role">Status: O'yinchi</p>
+                        <p class="text-[11px] text-cyan-400 font-bold" id="user-display-role">Status: O'yinchi</p>
                     </div>
                 </div>
-                <div class="bg-[#1b1e30] border border-red-500/20 rounded-xl px-4 py-1.5 text-right">
+                <div class="bg-1x-panel border border-cyan-500/30 rounded-xl px-4 py-1.5 text-right">
                     <span class="text-[10px] text-slate-400 block uppercase font-bold tracking-wider">Balans</span>
-                    <span class="text-sm font-black text-red-500 font-digital" id="main-balance">0 UZS</span>
+                    <span class="text-sm font-black text-cyan-400 font-digital" id="main-balance">0 UZS</span>
                 </div>
             </div>
         </header>
@@ -86,44 +99,61 @@
             
             <!-- O'YIN EKRANI -->
             <div id="tab-game" class="tab-content active space-y-4">
-                <div class="bg-[#141622] p-2 rounded-xl border border-slate-800 flex gap-1.5 overflow-x-auto text-[11px] font-bold" id="history-badges">
-                    <span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded">1.45x</span>
-                    <span class="bg-red-950 text-red-400 border border-red-900 px-2 py-0.5 rounded">8.20x</span>
-                    <span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded">2.10x</span>
+                <div class="bg-1x-dark p-2 rounded-xl border border-1x flex gap-1.5 overflow-x-auto text-[11px] font-bold" id="history-badges">
+                    <span class="bg-blue-900/50 text-cyan-300 px-2 py-0.5 rounded border border-blue-800">1.45x</span>
+                    <span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded">1.10x</span>
+                    <span class="bg-green-900/50 text-green-400 px-2 py-0.5 rounded border border-green-800">15.20x</span>
                 </div>
 
                 <!-- AVIATOR SAMOLYOT OYNASI -->
-                <div class="bg-[#090a0f] rounded-2xl h-64 relative overflow-hidden flex flex-col items-center justify-center border border-slate-800 shadow-inner">
-                    <div class="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#ef4444_1px,transparent_1px),linear-gradient(to_bottom,#ef4444_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+                <div class="bg-[#0b111d] rounded-2xl h-64 relative overflow-hidden flex flex-col items-center justify-center border border-1x shadow-inner">
+                    <!-- Setkalar foni -->
+                    <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#22d3ee_1px,transparent_1px),linear-gradient(to_bottom,#22d3ee_1px,transparent_1px)] bg-[size:40px_40px]"></div>
                     
                     <div id="flight-trail" class="flight-curve" style="width: 0%; height: 0%; opacity: 0;"></div>
 
                     <div class="z-20 text-center relative mt-8">
                         <span class="text-6xl font-black text-white tracking-tight font-digital drop-shadow-xl" id="live-multiplier">1.00x</span>
-                        <p class="text-xs text-red-500 uppercase font-bold tracking-widest mt-2 hidden animate-pulse" id="game-status-text">SAMOLYOT UCHMOQDA...</p>
+                        <p class="text-xs text-cyan-500 uppercase font-bold tracking-widest mt-2 hidden animate-pulse" id="game-status-text">KUTILYAPTI...</p>
                     </div>
 
-                    <div class="absolute bottom-4 left-4 text-red-500 text-5xl opacity-0 z-30 plane-glow" id="plane-element">
-                        <i class="fa-solid fa-plane" style="transform: rotate(-15deg);"></i>
+                    <div class="absolute bottom-4 left-4 text-cyan-400 text-5xl opacity-0 z-30 plane-glow" id="plane-element">
+                        <i class="fa-solid fa-plane-departure" style="transform: rotate(-15deg);"></i>
                     </div>
                 </div>
 
                 <!-- TIKISH PANELI -->
-                <div class="bg-[#141622] p-4 rounded-2xl border border-slate-800 space-y-3">
+                <div class="bg-1x-dark p-4 rounded-2xl border border-1x space-y-3">
+                    
+                    <!-- AVTO KESHAUT FUNKSIYASI -->
+                    <div class="flex justify-between items-center bg-1x-panel p-2 rounded-xl border border-1x mb-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-robot text-cyan-500"></i>
+                            <span class="text-xs font-bold text-slate-300">Avto Keshaut</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="auto-cashout-val" value="2.00" step="0.1" class="w-16 bg-1x-dark border border-1x rounded md text-xs text-center text-white p-1">
+                            <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="auto-cashout-toggle" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                <label for="auto-cashout-toggle" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex gap-2">
                         <div class="relative flex-1">
                             <span class="absolute left-3 top-2.5 text-xs text-slate-500 font-bold font-digital">UZS</span>
-                            <input type="number" id="bet-amount" value="2000" step="1000" class="w-full bg-[#1b1e30] border border-slate-700 rounded-xl pl-12 pr-3 py-2 text-sm font-bold text-white font-digital focus:outline-none">
+                            <input type="number" id="bet-amount" value="2000" step="1000" class="w-full bg-1x-panel border border-1x rounded-xl pl-12 pr-3 py-2 text-sm font-bold text-white font-digital focus:outline-none focus:border-cyan-500">
                         </div>
-                        <div class="flex gap-1 bg-[#1b1e30] p-1 rounded-xl border border-slate-750">
-                            <button onclick="adjustBet(5000)" class="px-2 text-xs font-bold text-slate-300 hover:bg-red-600 rounded-lg transition">+5k</button>
-                            <button onclick="adjustBet(20000)" class="px-2 text-xs font-bold text-slate-300 hover:bg-red-600 rounded-lg transition">+20k</button>
-                            <button onclick="adjustBet(50000)" class="px-2 text-xs font-bold text-slate-300 hover:bg-red-600 rounded-lg transition">+50k</button>
+                        <div class="flex gap-1 bg-1x-panel p-1 rounded-xl border border-1x">
+                            <button onclick="adjustBet(5000)" class="px-2 text-xs font-bold text-slate-300 hover:bg-blue-600 rounded-lg transition">+5k</button>
+                            <button onclick="adjustBet(10000)" class="px-2 text-xs font-bold text-slate-300 hover:bg-blue-600 rounded-lg transition">+10k</button>
+                            <button onclick="adjustBet(50000)" class="px-2 text-xs font-bold text-slate-300 hover:bg-blue-600 rounded-lg transition">+50k</button>
                         </div>
                     </div>
 
                     <button id="main-bet-btn" onclick="handleBetAction()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-600/20 transition-all text-center flex flex-col items-center justify-center">
-                        <span class="text-lg tracking-wider font-black" id="btn-primary-text">TIKISH KIRITISH</span>
+                        <span class="text-lg tracking-wider font-black" id="btn-primary-text">TIKISH</span>
                         <span class="text-xs text-green-200 font-normal mt-0.5" id="btn-sub-text">Parvoz startini kuting</span>
                     </button>
                 </div>
@@ -131,9 +161,9 @@
 
             <!-- TARIX -->
             <div id="tab-history" class="tab-content space-y-4">
-                <div class="bg-[#141622] p-4 rounded-2xl border border-slate-800">
-                    <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i class="fa-solid fa-history text-red-500"></i> O'yinlar Tarixi</h3>
-                    <div class="divide-y divide-slate-800 max-h-64 overflow-y-auto" id="bets-history-list">
+                <div class="bg-1x-dark p-4 rounded-2xl border border-1x">
+                    <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i class="fa-solid fa-history text-cyan-500"></i> O'yinlar Tarixi</h3>
+                    <div class="divide-y divide-1x max-h-[400px] overflow-y-auto" id="bets-history-list">
                         <p class="text-xs text-slate-500 py-4 text-center">Hozircha ma'lumotlar mavjud emas</p>
                     </div>
                 </div>
@@ -141,64 +171,84 @@
 
             <!-- AKKAUNT -->
             <div id="tab-account" class="tab-content space-y-4">
-                <div class="bg-[#141622] p-4 rounded-2xl border border-slate-800 space-y-4">
-                    <div class="flex justify-between items-center bg-[#1b1e30] p-3 rounded-xl border border-slate-750">
+                <div class="bg-1x-dark p-4 rounded-2xl border border-1x space-y-4">
+                    <div class="flex justify-between items-center bg-1x-panel p-3 rounded-xl border border-1x">
                         <div>
                             <p class="text-xs text-slate-400">Mening Profilim</p>
                             <p class="font-bold text-white text-sm mt-0.5" id="profile-name-show">-</p>
                         </div>
-                        <span class="text-xs bg-red-600/10 border border-red-500/20 text-red-500 px-2.5 py-1 rounded-lg font-bold" id="profile-id-show">ID: 0</span>
+                        <span class="text-xs bg-cyan-600/10 border border-cyan-500/30 text-cyan-400 px-2.5 py-1 rounded-lg font-bold" id="profile-id-show">ID: 0</span>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
-                        <button onclick="openDepositModal()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-wallet"></i> Pul Qo'shish
+                        <button onclick="openDepositModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-wallet"></i> To'ldirish
                         </button>
-                        <button onclick="handleWithdrawal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-reply"></i> Pul Yechish
+                        <button onclick="handleWithdrawal()" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-reply"></i> Yechish
                         </button>
                     </div>
                 </div>
+
+                <!-- KUNLIK BONUS VA REFERAL -->
+                <div class="bg-1x-dark p-4 rounded-2xl border border-1x space-y-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2"><i class="fa-solid fa-gift text-amber-500"></i> Aksiyalar va Bonuslar</h3>
+                    
+                    <button onclick="claimDailyBonus()" class="w-full bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white text-sm font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-calendar-check"></i> KUNLIK BONUS (5,000 UZS)
+                    </button>
+
+                    <div class="bg-1x-panel p-3 rounded-xl border border-1x space-y-2">
+                        <p class="text-xs text-cyan-400 font-bold"><i class="fa-solid fa-users"></i> Referal Dasturi (10,000 UZS)</p>
+                        <p class="text-[10px] text-slate-400">Do'stingiz ushbu havola orqali ro'yxatdan o'tsa, har bir do'stingiz uchun 10,000 UZS olasiz.</p>
+                        <div class="flex gap-2">
+                            <input type="text" id="ref-link" readonly class="flex-1 bg-1x-dark border border-1x rounded-lg px-3 py-2 text-xs text-white outline-none">
+                            <button onclick="copyRefLink()" class="bg-blue-600 px-3 rounded-lg text-white text-xs font-bold"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                    </div>
+                    
+                    <button onclick="logout()" class="w-full bg-red-900/30 text-red-500 hover:bg-red-900/50 text-xs font-bold py-3 rounded-xl border border-red-900 transition">
+                        <i class="fa-solid fa-right-from-bracket"></i> Tizimdan Chiqish
+                    </button>
+                </div>
             </div>
 
-            <!-- ADMIN TAB: SKRINSHOT BILAN 100% BIR XIL -->
+            <!-- ADMIN TAB -->
             <div id="tab-admin" class="tab-content space-y-4">
-                <div class="bg-[#141622] p-5 rounded-2xl border border-amber-500/40 space-y-5 shadow-2xl shadow-amber-600/10 relative overflow-hidden">
-                    
-                    <!-- Dekorativ fon -->
+                <div class="bg-1x-dark p-5 rounded-2xl border border-cyan-500/40 space-y-5 shadow-2xl shadow-cyan-600/10 relative overflow-hidden">
                     <div class="absolute top-0 right-0 p-4 opacity-5">
-                        <i class="fa-solid fa-shield-halved text-8xl text-amber-500"></i>
+                        <i class="fa-solid fa-shield-halved text-8xl text-cyan-500"></i>
                     </div>
 
-                    <h3 class="text-base font-black text-amber-500 flex items-center gap-2 uppercase tracking-widest relative z-10">
-                        <i class="fa-solid fa-shield-halved"></i> TIZIM BOSHQARUV MARKAZI
+                    <h3 class="text-base font-black text-cyan-400 flex items-center gap-2 uppercase tracking-widest relative z-10">
+                        <i class="fa-solid fa-user-tie"></i> BOSH ADMIN MARKAZI
                     </h3>
                     
                     <div class="space-y-3 pt-2 relative z-10">
-                        <label class="text-xs text-slate-400 font-bold block">O'yin Algoritmi / RTP Nazorati</label>
+                        <label class="text-xs text-slate-400 font-bold block">O'yin Algoritmi Nazorati</label>
                         <div class="grid grid-cols-3 gap-2 text-center">
-                            <button onclick="setAdminMode('low')" id="mode-low" class="bg-slate-800/80 text-slate-400 text-xs font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700 transition">TUSHIRISH (LOSS)</button>
-                            
-                            <!-- SKRINSHOTDAGI APELSIN RANG STANDART -->
-                            <button onclick="setAdminMode('normal')" id="mode-normal" class="bg-[#d97706] text-white text-xs font-bold py-3 rounded-xl border border-[#b45309] shadow-lg shadow-amber-600/20 transition">STANDART</button>
-                            
-                            <button onclick="setAdminMode('high')" id="mode-high" class="bg-slate-800/80 text-slate-400 text-xs font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700 transition">KO'TARISH (WIN)</button>
+                            <button onclick="setAdminMode('low')" id="mode-low" class="bg-slate-800/80 text-slate-400 text-xs font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700 transition">TUSHIRISH</button>
+                            <button onclick="setAdminMode('normal')" id="mode-normal" class="bg-cyan-600 text-white text-xs font-bold py-3 rounded-xl border border-cyan-500 shadow-lg shadow-cyan-600/20 transition">STANDART</button>
+                            <button onclick="setAdminMode('high')" id="mode-high" class="bg-slate-800/80 text-slate-400 text-xs font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700 transition">KO'TARISH</button>
                         </div>
                     </div>
 
-                    <div class="space-y-3 border-t border-slate-800 pt-5 relative z-10">
-                        <label class="text-xs text-slate-400 font-bold block">Tizimdagi Foydalanuvchilar Ro'yxati (Jonli Ma'lumotlar)</label>
-                        <div class="bg-[#1b1e30] rounded-xl border border-slate-700 overflow-hidden shadow-inner">
+                    <div class="space-y-3 border-t border-1x pt-5 relative z-10">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs text-slate-400 font-bold block">Foydalanuvchilar Bazas</label>
+                            <span class="text-[9px] text-cyan-500 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">Jonli rejim</span>
+                        </div>
+                        <div class="bg-1x-panel rounded-xl border border-1x overflow-hidden shadow-inner">
                             <table class="w-full text-left text-xs">
-                                <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                                <thead class="bg-slate-800/60 text-slate-400 border-b border-1x">
                                     <tr>
-                                        <th class="p-3 font-bold">Ism / Tel</th>
+                                        <th class="p-3 font-bold">Foydalanuvchi</th>
                                         <th class="p-3 font-bold text-center">Balans</th>
                                         <th class="p-3 font-bold text-right">Amal</th>
                                     </tr>
                                 </thead>
-                                <tbody id="admin-users-list" class="divide-y divide-slate-700/50">
-                                    <!-- Dinamik foydalanuvchilar ro'yxati shu yerga tushadi -->
+                                <tbody id="admin-users-list" class="divide-y divide-1x/50">
+                                    <!-- Dinamik tushadi -->
                                 </tbody>
                             </table>
                         </div>
@@ -208,28 +258,28 @@
 
         </main>
 
-        <nav class="bg-[#141622] border-t border-slate-800 fixed bottom-0 left-0 right-0 z-40">
+        <nav class="bg-1x-dark border-t border-1x fixed bottom-0 left-0 right-0 z-40">
             <div class="max-w-md mx-auto px-4 py-2 flex justify-between items-center text-slate-400">
-                <button onclick="switchTab('game')" id="nav-game" class="flex flex-col items-center gap-1 text-red-500 font-bold flex-1 transition">
+                <button onclick="switchTab('game')" id="nav-game" class="flex flex-col items-center gap-1 text-blue-500 font-bold flex-1 transition">
                     <i class="fa-solid fa-gamepad text-lg"></i><span class="text-[10px]">O'yin</span>
                 </button>
-                <button onclick="switchTab('history')" id="nav-history" class="flex flex-col items-center gap-1 font-bold flex-1 transition">
+                <button onclick="switchTab('history')" id="nav-history" class="flex flex-col items-center gap-1 font-bold flex-1 transition hover:text-white">
                     <i class="fa-solid fa-list text-lg"></i><span class="text-[10px]">Tarix</span>
                 </button>
-                <button onclick="switchTab('account')" id="nav-account" class="flex flex-col items-center gap-1 font-bold flex-1 transition">
+                <button onclick="switchTab('account')" id="nav-account" class="flex flex-col items-center gap-1 font-bold flex-1 transition hover:text-white">
                     <i class="fa-solid fa-user text-lg"></i><span class="text-[10px]">Akkaunt</span>
                 </button>
-                <button onclick="switchTab('admin')" id="nav-admin" class="flex-col items-center gap-1 font-bold flex-1 hidden text-amber-500 transition hover:text-amber-400">
+                <button onclick="switchTab('admin')" id="nav-admin" class="flex-col items-center gap-1 font-bold flex-1 hidden text-cyan-500 transition hover:text-cyan-400">
                     <i class="fa-solid fa-shield-halved text-lg"></i><span class="text-[10px]">Admin</span>
                 </button>
             </div>
         </nav>
     </div>
 
-    <!-- Deposit Modal (O'zgarmagan) -->
-    <div id="deposit-modal" class="fixed inset-0 bg-[#090a0f]/90 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
-        <div class="bg-[#141622] w-full max-w-sm rounded-2xl p-6 space-y-5 border border-slate-800 shadow-2xl">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+    <!-- Deposit Modal -->
+    <div id="deposit-modal" class="fixed inset-0 bg-[#0b111d]/90 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-1x-dark w-full max-w-sm rounded-2xl p-6 space-y-5 border border-1x shadow-2xl">
+            <div class="flex justify-between items-center border-b border-1x pb-3">
                 <h3 class="font-bold text-white text-sm uppercase tracking-wider">Hisob To'ldirish</h3>
                 <button onclick="closeDepositModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
@@ -246,71 +296,94 @@
     </div>
 
     <script>
-        // BAZA: Barcha ro'yxatdan o'tganlarni localStorage da saqlaymiz
-        let usersDB = JSON.parse(localStorage.getItem('aviatorUsersDB_v2')) || [];
-        function saveDB() { localStorage.setItem('aviatorUsersDB_v2', JSON.stringify(usersDB)); }
+        // BAZA: Barcha ma'lumotlar localStorage da saqlanadi
+        let usersDB = JSON.parse(localStorage.getItem('aviator1xUsersDB')) || [];
+        function saveDB() { localStorage.setItem('aviator1xUsersDB', JSON.stringify(usersDB)); }
 
-        // Game & User States
-        let userData = { id: null, name: '', phone: '', balance: 0, isAdmin: false, createdAt: 0 };
+        // Avto-kirishni eslab qolish uchun
+        let activeUserId = localStorage.getItem('aviatorActiveSession');
+
+        // O'zgaruvchilar
+        let userData = { id: null, name: '', phone: '', balance: 0, isAdmin: false, createdAt: 0, lastBonus: 0 };
         let isPlaying = false, isBetPlaced = false;
         let currentMultiplier = 1.00, crashPoint = 2.00;
         let gameInterval = null;
         let systemAlgMode = 'normal';
 
-        // Auth Logic (Tizimga kirish)
+        // TIZIMGA AVTOMATIK KIRISH TEKSHIRUVI
+        window.onload = () => {
+            if (activeUserId) {
+                let userExists = usersDB.find(u => u.id === activeUserId);
+                if (userExists) {
+                    userData = userExists;
+                    startAppUI();
+                } else {
+                    localStorage.removeItem('aviatorActiveSession');
+                }
+            }
+        };
+
+        // Auth Logic
         function processAuth() {
             const nameInput = document.getElementById('auth-name').value.trim();
             const phoneInput = document.getElementById('auth-phone').value.trim();
 
             if (!nameInput || phoneInput.length < 4) {
-                alert("Iltimos, ismingiz va raqamingizni to'liq kiriting!");
+                alert("Iltimos, ma'lumotlarni to'liq kiriting!");
                 return;
             }
 
-            // @smart_gemini paroli tekshiruvi
             let checkIsAdmin = (nameInput === "@smart_gemini" || phoneInput === "@smart_gemini" || nameInput === "8355669630");
-
             let existingUserIndex = usersDB.findIndex(u => u.phone === phoneInput && u.name === nameInput);
 
             if (existingUserIndex > -1) {
-                // Eskisini yuklash
                 userData = usersDB[existingUserIndex];
                 if (checkIsAdmin && !userData.isAdmin) {
                     userData.isAdmin = true;
-                    userData.balance = 4916888; // Skrinshotdagi balans
                     usersDB[existingUserIndex] = userData;
                 }
             } else {
-                // Yangi qo'shish
                 userData = {
-                    id: Date.now().toString(),
+                    id: 'usr_' + Date.now(),
                     name: checkIsAdmin ? "Bosh Admin 👑" : nameInput,
                     phone: phoneInput,
-                    balance: checkIsAdmin ? 4916888 : 0, 
+                    balance: checkIsAdmin ? 15000000 : 0, 
                     isAdmin: checkIsAdmin,
-                    createdAt: Date.now() // Qachon ro'yxatdan o'tgani
+                    createdAt: Date.now(),
+                    lastBonus: 0
                 };
                 usersDB.push(userData);
             }
             saveDB();
+            
+            // Sessiyani eslab qolish
+            localStorage.setItem('aviatorActiveSession', userData.id);
+            startAppUI();
+        }
 
-            // Interfeysni yangilash
+        function startAppUI() {
             if (userData.isAdmin) {
                 document.getElementById('user-display-name').innerHTML = `${userData.name}`;
-                document.getElementById('user-display-role').innerHTML = `Status: Tizim Admini <i class="fa-solid fa-hammer"></i>`;
+                document.getElementById('user-display-role').innerHTML = `Status: Tizim Admini <i class="fa-solid fa-shield-halved text-cyan-400"></i>`;
                 document.getElementById('nav-admin').classList.remove('hidden');
                 document.getElementById('nav-admin').classList.add('flex');
             } else {
                 document.getElementById('user-display-name').innerText = userData.name;
-                document.getElementById('user-display-role').innerHTML = `Status: O'yinchi <i class="fa-solid fa-check text-green-500"></i>`;
+                document.getElementById('user-display-role').innerHTML = `Status: O'yinchi <i class="fa-solid fa-check-circle text-green-500"></i>`;
             }
 
             document.getElementById('profile-name-show').innerText = userData.name;
-            document.getElementById('profile-id-show').innerText = "ID: " + userData.id.slice(-5);
+            document.getElementById('profile-id-show').innerText = "ID: " + userData.id.split('_')[1].slice(-5);
+            document.getElementById('ref-link').value = "https://t.me/smart_gemini?start=ref_" + userData.id.split('_')[1];
+            
             updateBalanceUI();
-
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
+        }
+
+        function logout() {
+            localStorage.removeItem('aviatorActiveSession');
+            location.reload();
         }
 
         function updateBalanceUI() {
@@ -324,6 +397,29 @@
             }
         }
 
+        // KUNLIK BONUS VA REFERAL FUNKSIYASI
+        function claimDailyBonus() {
+            let now = Date.now();
+            let oneDay = 24 * 60 * 60 * 1000;
+            if(!userData.lastBonus || (now - userData.lastBonus) > oneDay) {
+                userData.balance += 5000;
+                userData.lastBonus = now;
+                updateBalanceUI();
+                alert("Tabriklaymiz! Sizga 5,000 UZS kunlik bonus berildi.");
+            } else {
+                let leftHours = Math.ceil((oneDay - (now - userData.lastBonus)) / (1000 * 60 * 60));
+                alert(`Siz bugun bonus olgansiz! Keyingi bonusgacha ${leftHours} soat qoldi.`);
+            }
+        }
+
+        function copyRefLink() {
+            let link = document.getElementById('ref-link');
+            link.select();
+            document.execCommand('copy');
+            alert("Referal havola nusxalandi! Do'stingiz kirsa 10,000 UZS olasiz.");
+        }
+
+        // TAB ALMASHTIRISH
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
@@ -333,10 +429,10 @@
                 const btn = document.getElementById('nav-' + t);
                 if(!btn) return;
                 if(t === tabId) {
-                    btn.classList.add(t === 'admin' ? 'text-amber-500' : 'text-red-500');
+                    btn.classList.add(t === 'admin' ? 'text-cyan-500' : 'text-blue-500');
                     btn.classList.remove('text-slate-400');
                 } else {
-                    btn.classList.remove('text-red-500', 'text-amber-500');
+                    btn.classList.remove('text-blue-500', 'text-cyan-500');
                     btn.classList.add('text-slate-400');
                 }
             });
@@ -352,35 +448,32 @@
             if(!list) return;
             list.innerHTML = '';
 
-            let sortedUsers = [...usersDB].sort((a,b) => b.createdAt - a.createdAt); // Eng yangilar tepada
+            let sortedUsers = [...usersDB].sort((a,b) => b.createdAt - a.createdAt);
 
             sortedUsers.forEach(user => {
                 const tr = document.createElement('tr');
-                
-                // Yangi qo'shilganlarni ajratib ko'rsatish (Oxirgi 15 minutda kirgan bo'lsa)
                 let isNewUser = (Date.now() - user.createdAt) < (15 * 60 * 1000);
-                let badge = isNewUser ? `<span class="bg-green-500/20 text-green-400 border border-green-500/30 text-[9px] px-1.5 py-0.5 rounded ml-1 font-bold animate-pulse uppercase tracking-wider">Yangi</span>` : '';
+                let badge = isNewUser ? `<span class="bg-green-500/20 text-green-400 border border-green-500/30 text-[9px] px-1.5 py-0.5 rounded ml-1 animate-pulse uppercase">Yangi</span>` : '';
 
                 let amallarCode = user.isAdmin 
-                    ? `<span class="bg-amber-500/20 text-amber-500 text-[10px] font-bold px-3 py-1.5 rounded border border-amber-500/30">ADMIN</span>`
+                    ? `<span class="text-cyan-500 text-[10px] font-bold">ADMIN</span>`
                     : `<div class="flex justify-end gap-1.5">
-                        <button onclick="adminManageBal('${user.id}', true)" class="bg-green-600 hover:bg-green-500 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm transition shadow-lg shadow-green-600/20">+</button>
-                        <button onclick="adminManageBal('${user.id}', false)" class="bg-red-600 hover:bg-red-500 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm transition shadow-lg shadow-red-600/20">-</button>
+                        <button onclick="adminManageBal('${user.id}', true)" class="bg-blue-600 hover:bg-blue-500 text-white w-7 h-7 rounded font-bold shadow-lg shadow-blue-600/20">+</button>
+                        <button onclick="adminManageBal('${user.id}', false)" class="bg-slate-700 hover:bg-slate-600 text-white w-7 h-7 rounded font-bold shadow-lg">-</button>
                        </div>`;
 
                 tr.innerHTML = `
                     <td class="p-3">
-                        <div class="font-bold text-white text-[13px] flex items-center">${user.name} ${badge}</div>
-                        <div class="text-[10px] text-slate-500 mt-0.5">${user.phone}</div>
+                        <div class="font-bold text-white text-[12px] flex items-center">${user.name} ${badge}</div>
+                        <div class="text-[9px] text-cyan-500 mt-0.5 font-digital">${user.phone}</div>
                     </td>
-                    <td class="p-3 text-center font-bold text-white text-[12px]">${user.balance.toLocaleString()} UZS</td>
+                    <td class="p-3 text-center font-bold text-white text-[12px]">${user.balance.toLocaleString()}</td>
                     <td class="p-3 text-right">${amallarCode}</td>
                 `;
                 list.appendChild(tr);
             });
         }
 
-        // PULL QO'SHISH (100% ISHLAYDI)
         function adminManageBal(userId, isAdd) {
             let userIndex = usersDB.findIndex(u => u.id === userId);
             if(userIndex === -1) return;
@@ -388,50 +481,53 @@
             let ism = usersDB[userIndex].name;
             let currentBal = usersDB[userIndex].balance;
 
-            let summaStr = prompt(isAdd 
-                ? `Diqqat: ${ism} ga QANCHA PUL QO'SHMOQCHISIZ? (UZS)\nHozirgi balansi: ${currentBal.toLocaleString()} UZS` 
-                : `Diqqat: ${ism} dan QANCHA PUL AYIRMOQCHISIZ? (UZS)\nHozirgi balansi: ${currentBal.toLocaleString()} UZS`);
-            
+            let summaStr = prompt(isAdd ? `${ism} ga QANCHA QO'SHASIZ? (UZS)` : `${ism} dan QANCHA OLASIZ? (UZS)`);
             if(!summaStr) return;
             
-            let summa = parseInt(summaStr.replace(/[^0-9]/g, '')); // Faqat raqamlarni oladi
-            if(isNaN(summa) || summa <= 0) {
-                alert("Xato: Noto'g'ri raqam kiritildi!");
-                return;
-            }
+            let summa = parseInt(summaStr.replace(/[^0-9]/g, ''));
+            if(isNaN(summa) || summa <= 0) return;
 
             if(isAdd) {
                 usersDB[userIndex].balance += summa;
-                alert(`Muvaffaqiyatli! ${ism} ning hisobiga ${summa.toLocaleString()} UZS qo'shildi.`);
             } else {
                 usersDB[userIndex].balance = Math.max(0, usersDB[userIndex].balance - summa);
-                alert(`Muvaffaqiyatli! ${ism} ning hisobidan ${summa.toLocaleString()} UZS olib tashlandi.`);
             }
             
             saveDB();
-            renderAdminUsers(); // Jadvalni srazi yangilaydi
+            renderAdminUsers();
         }
 
-        // RTP tugmalarini Skrinshotga o'xshatish
         function setAdminMode(mode) {
             systemAlgMode = mode;
-            let normalClass = "bg-[#d97706] text-white text-xs font-bold py-3 rounded-xl border border-[#b45309] shadow-lg shadow-amber-600/20";
-            let passiveClass = "bg-slate-800/80 text-slate-400 text-xs font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700";
+            let normalClass = "bg-cyan-600 text-white text-xs font-bold py-3 rounded-xl border border-cyan-500 shadow-lg shadow-cyan-600/20 transition";
+            let passiveClass = "bg-slate-800/80 text-slate-400 text-xs font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700 transition";
 
             ['low', 'normal', 'high'].forEach(m => {
                 document.getElementById('mode-' + m).className = passiveClass;
             });
-
-            if(mode === 'normal') { document.getElementById('mode-normal').className = normalClass; }
-            else if(mode === 'low') { document.getElementById('mode-low').className = normalClass.replace('#d97706', 'red-700').replace('#b45309', 'red-800'); }
-            else if(mode === 'high') { document.getElementById('mode-high').className = normalClass.replace('#d97706', 'green-600').replace('#b45309', 'green-700'); }
+            document.getElementById('mode-' + mode).className = normalClass;
         }
 
-        // --- AVIATOR GAME LOGIC & ANIMATION ---
+        // --- AVIATOR GAME LOGIC & AVTO KESHAUT ---
         function adjustBet(val) {
             if(isPlaying || isBetPlaced) return;
             let current = parseInt(document.getElementById('bet-amount').value) || 0;
             document.getElementById('bet-amount').value = current + val;
+        }
+
+        function triggerCashOut(betAmt) {
+            isPlaying = false;
+            let winnings = Math.floor(betAmt * currentMultiplier);
+            userData.balance += winnings;
+            updateBalanceUI();
+            logGameHistory(betAmt, currentMultiplier, winnings, true);
+            
+            let btn = document.getElementById('main-bet-btn');
+            btn.className = "w-full bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg transition-all text-center";
+            document.getElementById('btn-primary-text').innerText = "YUTUQ: " + winnings.toLocaleString();
+            document.getElementById('btn-sub-text').innerText = "Muvaffaqiyatli keshaut!";
+            
+            setTimeout(resetFlightUI, 2500);
         }
 
         function handleBetAction() {
@@ -440,7 +536,7 @@
 
             if (!isBetPlaced && !isPlaying) {
                 if (userData.balance < betAmt) {
-                    alert("Balansda yetarli mablag' mavjud emas! Admindan pul so'rang.");
+                    alert("Balans yetarli emas!");
                     return;
                 }
                 userData.balance -= betAmt;
@@ -448,20 +544,14 @@
                 isBetPlaced = true;
 
                 let btn = document.getElementById('main-bet-btn');
-                btn.className = "w-full bg-amber-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-amber-600/20 transition-all text-center flex flex-col items-center justify-center animate-pulse";
-                document.getElementById('btn-primary-text').innerText = "KUTILMOQDA...";
-                document.getElementById('btn-sub-text').innerText = "Keyingi parvozga tayyorlanmoqda";
+                btn.className = "w-full bg-amber-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-amber-600/20 transition-all text-center animate-pulse flex flex-col items-center justify-center";
+                document.getElementById('btn-primary-text').innerText = "KUTING...";
+                document.getElementById('btn-sub-text').innerText = "Samolyot tayyorlanmoqda";
                 
                 setTimeout(launchPlane, 2000);
             } else if (isPlaying) {
-                // Cashout
-                isPlaying = false;
-                let winnings = Math.floor(betAmt * currentMultiplier);
-                userData.balance += winnings;
-                updateBalanceUI();
-
-                logGameHistory(betAmt, currentMultiplier, winnings, true);
-                resetFlightUI();
+                // Manual Cashout
+                triggerCashOut(betAmt);
             }
         }
 
@@ -476,26 +566,36 @@
             else { crashPoint = Math.random() < 0.6 ? (Math.random() * (2.10 - 1.05) + 1.05) : (Math.random() * (8.90 - 2.10) + 2.10); }
 
             let btn = document.getElementById('main-bet-btn');
-            btn.className = "w-full bg-green-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/20 transition-all text-center flex flex-col items-center justify-center";
+            btn.className = "w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-600/30 transition-all text-center flex flex-col items-center justify-center";
             document.getElementById('btn-primary-text').innerText = "CASH OUT";
             document.getElementById('game-status-text').classList.remove('hidden');
 
             const plane = document.getElementById('plane-element');
             const trail = document.getElementById('flight-trail');
-            plane.style.opacity = '1';
-            trail.style.opacity = '1';
+            plane.style.opacity = '1'; trail.style.opacity = '1';
+
+            // Avto keshaut sozlamalari
+            const autoCashoutEnabled = document.getElementById('auto-cashout-toggle').checked;
+            const autoCashoutVal = parseFloat(document.getElementById('auto-cashout-val').value) || 0;
+            const betAmt = parseInt(document.getElementById('bet-amount').value) || 0;
 
             gameInterval = setInterval(() => {
+                // AVTO KESHAUT TEKSHIRUVI
+                if (autoCashoutEnabled && isPlaying && currentMultiplier >= autoCashoutVal) {
+                    triggerCashOut(betAmt);
+                    return; // loop davom etadi, lekin isPlaying false bo'ladi
+                }
+
                 if (currentMultiplier >= crashPoint) {
                     clearInterval(gameInterval);
                     if (isPlaying) {
                         logGameHistory(parseInt(document.getElementById('bet-amount').value), currentMultiplier, 0, false);
                         document.getElementById('live-multiplier').innerText = currentMultiplier.toFixed(2) + "x";
-                        document.getElementById('live-multiplier').className = "text-6xl font-black text-red-600 font-digital drop-shadow-xl scale-110 transition-transform";
+                        document.getElementById('live-multiplier').className = "text-6xl font-black text-slate-500 font-digital drop-shadow-xl scale-110 transition-transform";
                         document.getElementById('game-status-text').innerText = "UCHIB KETDI!";
-                        document.getElementById('game-status-text').classList.remove('text-red-500', 'animate-pulse');
-                        document.getElementById('game-status-text').classList.add('text-red-600');
-                        plane.style.opacity = '0'; // crashed
+                        document.getElementById('game-status-text').classList.remove('text-cyan-500', 'animate-pulse');
+                        document.getElementById('game-status-text').classList.add('text-slate-500');
+                        plane.style.opacity = '0';
                         isPlaying = false;
                     }
                     setTimeout(resetFlightUI, 2500);
@@ -505,20 +605,19 @@
                 currentMultiplier += currentMultiplier * 0.012 + 0.005;
                 document.getElementById('live-multiplier').innerText = currentMultiplier.toFixed(2) + 'x';
                 
-                let bAmt = parseInt(document.getElementById('bet-amount').value) || 0;
-                document.getElementById('btn-sub-text').innerText = "Yutuq: " + Math.floor(bAmt * currentMultiplier).toLocaleString() + " UZS";
+                if(isPlaying) {
+                    document.getElementById('btn-sub-text').innerText = "Yutuq: " + Math.floor(betAmt * currentMultiplier).toLocaleString() + " UZS";
+                }
 
-                // ANIMATSIYA: O'ngga va Tepaga qiyshiq uchish trayektoriyasi
-                let progress = currentMultiplier - 1; // 0 dan boshlanadi
-                let xPos = Math.min(10 + progress * 25, 80); // O'ng tarafga (max 80%)
-                let yPos = Math.min(10 + Math.pow(progress, 1.2) * 15, 70); // Tepaga curve bo'lib ko'tariladi
-                let angle = Math.min(progress * 15, 45); // Burunni ko'tarish
+                let progress = currentMultiplier - 1;
+                let xPos = Math.min(10 + progress * 25, 80);
+                let yPos = Math.min(10 + Math.pow(progress, 1.2) * 15, 70);
+                let angle = Math.min(progress * 15, 45);
 
                 plane.style.left = xPos + '%';
                 plane.style.bottom = yPos + '%';
                 plane.style.transform = `rotate(-${angle}deg)`;
 
-                // Orqasidagi qizil chiziq (Trail)
                 trail.style.width = (xPos + 5) + '%';
                 trail.style.height = (yPos + 5) + '%';
 
@@ -532,7 +631,7 @@
             if(currentMultiplier > 1.01 && !document.getElementById('game-status-text').innerText.includes("UCHIB")) {
                 const ribbon = document.getElementById('history-badges');
                 const span = document.createElement('span');
-                span.className = currentMultiplier >= 5 ? "bg-red-950 text-red-400 border border-red-900 px-2 py-0.5 rounded" : "bg-slate-800 text-slate-400 px-2 py-0.5 rounded";
+                span.className = currentMultiplier >= 5 ? "bg-green-900/50 text-green-400 px-2 py-0.5 rounded border border-green-800" : "bg-slate-800 text-slate-400 px-2 py-0.5 rounded";
                 span.innerText = currentMultiplier.toFixed(2) + 'x';
                 ribbon.insertBefore(span, ribbon.firstChild);
             }
@@ -542,12 +641,12 @@
             
             let statusText = document.getElementById('game-status-text');
             statusText.classList.add('hidden');
-            statusText.innerText = "SAMOLYOT UCHMOQDA...";
-            statusText.className = "text-xs text-red-500 uppercase font-bold tracking-widest mt-2 hidden animate-pulse";
+            statusText.innerText = "KUTILYAPTI...";
+            statusText.className = "text-xs text-cyan-500 uppercase font-bold tracking-widest mt-2 hidden animate-pulse";
 
             let btn = document.getElementById('main-bet-btn');
-            btn.className = "w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-600/20 transition-all text-center flex flex-col items-center justify-center";
-            document.getElementById('btn-primary-text').innerText = "TIKISH KIRITISH";
+            btn.className = "w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all text-center flex flex-col items-center justify-center";
+            document.getElementById('btn-primary-text').innerText = "TIKISH";
             document.getElementById('btn-sub-text').innerText = "Parvoz startini kuting";
 
             const plane = document.getElementById('plane-element');
@@ -567,14 +666,14 @@
                     <p class="font-bold text-white">${bet.toLocaleString()} UZS</p>
                     <p class="text-[10px] text-slate-500">Hozirgina</p>
                 </div>
-                ${isWin ? `<span class="text-green-500 font-bold bg-green-500/10 px-2 py-1 rounded border border-green-500/20">+${win.toLocaleString()} UZS (${mult.toFixed(2)}x)</span>` : `<span class="text-red-500 font-bold bg-red-500/10 px-2 py-1 rounded border border-red-500/20">Uchib ketdi (${mult.toFixed(2)}x)</span>`}
+                ${isWin ? `<span class="text-green-400 font-bold bg-green-500/10 px-2 py-1 rounded border border-green-500/20">+${win.toLocaleString()} UZS (${mult.toFixed(2)}x)</span>` : `<span class="text-slate-400 font-bold bg-slate-800 px-2 py-1 rounded">Yutqazildi (${mult.toFixed(2)}x)</span>`}
             `;
             container.insertBefore(div, container.firstChild);
         }
 
         function openDepositModal() { document.getElementById('deposit-modal').classList.remove('hidden'); }
         function closeDepositModal() { document.getElementById('deposit-modal').classList.add('hidden'); }
-        function handleWithdrawal() { alert("Yechish so'rovi yuborildi. Tekshirish uchun bot adminiga yozing: @smart_gemini"); }
+        function handleWithdrawal() { alert("Yechish so'rovi yuborildi. Iltimos bot adminini kuting: @smart_gemini"); }
     </script>
 </body>
 </html>
