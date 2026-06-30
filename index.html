@@ -2,937 +2,579 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Code Market - Premium Digital Marketplace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Crash Pro - @smart_gemini</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            /* Mavzu 1: Neon Qizil (Default) */
-            --bg-color: #0a0a0f;
-            --panel-bg: #12121a;
-            --primary: #ff2a5f;
-            --primary-glow: rgba(255, 42, 95, 0.4);
-            --text-main: #ffffff;
-            --text-muted: #8e8e9f;
-            --border: #222230;
-            --success: #00ff88;
-            --danger: #ff2a5f;
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap');
+        body { font-family: 'Rajdhani', sans-serif; background-color: #0c0d14; }
+        .font-digital { font-family: 'Orbitron', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        @keyframes pulse-red {
+            0%, 100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 8px rgba(239,68,68,0.8)); }
+            50% { transform: scale(1.05); opacity: 0.8; filter: drop-shadow(0 0 15px rgba(239,68,68,1)); }
         }
-
-        [data-theme="cyber"] {
-            /* Mavzu 2: Kiber Firuza */
-            --bg-color: #03080e;
-            --panel-bg: #09111a;
-            --primary: #00f3ff;
-            --primary-glow: rgba(0, 243, 255, 0.4);
-            --border: #112535;
-        }
-
-        [data-theme="minimalist"] {
-            /* Mavzu 3: Minimalist To'q Oq */
-            --bg-color: #121212;
-            --panel-bg: #1c1c1c;
-            --primary: #e5e5e5;
-            --primary-glow: rgba(229, 229, 229, 0.2);
-            --border: #2d2d2d;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        /* --- Scrollbar --- */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-
-        /* --- Utils --- */
-        .hidden { display: none !important; }
-        .text-primary { color: var(--primary); text-shadow: 0 0 8px var(--primary-glow); }
-        .flex { display: flex; }
-        .flex-col { flex-direction: column; }
-        .items-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
-        .justify-center { justify-content: center; }
-        .gap-2 { gap: 10px; } 
-        .gap-4 { gap: 20px; }
+        .plane-glow { animation: pulse-red 2s infinite; transition: all 0.1s linear; }
         
-        button {
-            background: transparent; border: 1px solid var(--primary); color: var(--primary);
-            padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold;
-            transition: all 0.2s ease-in-out; text-transform: uppercase; letter-spacing: 1px;
-            font-size: 13px;
-        }
-        button:hover, button.active-btn {
-            background: var(--primary); color: #000;
-            box-shadow: 0 0 15px var(--primary-glow);
-        }
-        button:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
-        
-        input, select, textarea {
-            width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border); color: var(--text-main);
-            border-radius: 8px; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        input:focus, select:focus, textarea:focus { 
-            border-color: var(--primary); 
-            box-shadow: 0 0 8px var(--primary-glow); 
-        }
-
-        /* --- Login Screen --- */
-        #login-screen {
-            height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; padding: 20px;
-            background: radial-gradient(circle at center, var(--panel-bg), var(--bg-color));
-        }
-        .login-box {
-            background: var(--panel-bg); padding: 40px; border-radius: 16px;
-            border: 1px solid var(--border); box-shadow: 0 0 35px rgba(0,0,0,0.7);
-            text-align: center; width: 100%; max-width: 400px;
-            position: relative;
-        }
-        .author-credit {
-            margin-top: 25px; font-size: 14px; font-weight: bold;
-            letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase;
-        }
-
-        /* --- App Layout --- */
-        #app-layout { display: flex; height: 100vh; overflow: hidden; }
-
-        /* --- Navigation --- */
-        nav {
-            background: var(--panel-bg); border-right: 1px solid var(--border);
-            display: flex; flex-direction: column; width: 260px; z-index: 100;
-        }
-        .nav-logo {
-            padding: 25px 20px; border-bottom: 1px solid var(--border); display: flex;
-            align-items: center; gap: 15px; font-size: 20px; font-weight: 900; letter-spacing: 1.5px;
-        }
-        
-        /* 2D Spin Animation */
-        .cyber-logo {
-            position: relative; width: 38px; height: 38px;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .cyber-logo::before {
-            content: ''; position: absolute; inset: 0;
-            border: 2px dashed var(--primary); border-radius: 50%;
-            animation: spin 5s linear infinite;
-        }
-        .cyber-logo::after {
-            content: ''; position: absolute; inset: 5px;
-            border: 2px solid var(--text-main); border-radius: 50%; border-bottom-color: transparent;
-            animation: spin-reverse 2.5s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
-        .cyber-logo span { font-size: 13px; font-weight: 900; color: var(--primary); position: relative; z-index: 2; }
-
-        .nav-links { flex: 1; padding: 20px 0; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
-        .nav-link {
-            padding: 14px 20px; display: flex; align-items: center; gap: 12px;
-            cursor: pointer; color: var(--text-muted); transition: 0.2s; font-weight: 500;
-            font-size: 15px;
-        }
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary); background: rgba(255, 255, 255, 0.03); border-left: 4px solid var(--primary);
-        }
-        .user-balance { padding: 20px; border-top: 1px solid var(--border); text-align: center; }
-
-        /* --- Main Arena --- */
-        main { flex: 1; display: flex; flex-direction: column; position: relative; }
-        .header-bar {
-            padding: 15px 20px; background: var(--panel-bg); border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center; gap: 15px;
-        }
-        .search-bar { flex: 1; max-width: 450px; }
-        .page-content { flex: 1; overflow-y: auto; padding: 25px; }
-        
-        #broadcast-banner {
-            background: var(--primary); color: #000; padding: 12px;
-            text-align: center; font-weight: bold; font-size: 14px; box-shadow: 0 2px 10px var(--primary-glow);
-        }
-
-        /* --- Product Cards & Grids --- */
-        .listings-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 20px;
-        }
-        .card {
-            background: var(--panel-bg); border: 1px solid var(--border); border-radius: 14px;
-            overflow: hidden; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; display: flex; flex-direction: column;
-        }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px var(--primary-glow); border-color: var(--primary); }
-        .card-img-wrapper { width: 100%; height: 160px; background: #151522; position: relative; overflow: hidden; }
-        .card-img { width: 100%; height: 100%; object-fit: cover; }
-        .card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
-        .card-title { font-size: 17px; font-weight: bold; margin-bottom: 6px; line-height: 1.3; }
-        .card-cat { font-size: 11px; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .card-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; flex: 1; line-height: 1.4; }
-        .card-meta { background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.02); }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .card-price { font-size: 20px; font-weight: 800; color: var(--success); }
-        .card-actions { display: flex; gap: 8px; }
-        .card-actions button { flex: 1; padding: 10px; font-size: 12px; }
-        .btn-icon { max-width: 42px; min-width: 42px; height: 42px; padding: 0; display: flex; justify-content: center; align-items: center; font-size: 16px; }
-
-        /* --- Modals --- */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);
-            display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px;
-        }
-        .modal {
-            background: var(--panel-bg); padding: 30px; border-radius: 16px; width: 100%;
-            max-width: 550px; border: 1px solid var(--primary); box-shadow: 0 0 35px var(--primary-glow);
-            max-height: 90vh; overflow-y: auto;
-        }
-        .modal-header { font-size: 22px; font-weight: bold; margin-bottom: 20px; text-align: center; letter-spacing: 1px; }
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; margin-bottom: 6px; font-size: 13px; color: var(--text-muted); font-weight: 600; }
-        .calc-info { font-size: 12px; color: var(--success); margin-top: 6px; display: block; font-weight: 500; }
-        
-        .radio-tile-group { display: flex; gap: 10px; }
-        .radio-tile { flex: 1; text-align: center; padding: 10px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-        .radio-tile.selected { border-color: var(--primary); background: rgba(255,42,95,0.05); color: var(--primary); }
-
-        /* Generic Lists */
-        .list-item {
-            background: var(--panel-bg); border: 1px solid var(--border); padding: 18px;
-            border-radius: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
-        }
-
-        /* --- Mobile Responsive Rules --- */
-        @media (max-width: 768px) {
-            #app-layout { flex-direction: column; }
-            nav { width: 100%; border-right: none; border-top: 1px solid var(--border); flex-direction: row; order: 2; height: 68px; }
-            .nav-logo, .user-balance { display: none; }
-            .nav-links { flex-direction: row; justify-content: space-around; padding: 0; align-items: center; }
-            .nav-link { flex-direction: column; gap: 4px; padding: 8px 10px; border-left: none; font-size: 10px; text-align: center; flex: 1; }
-            .nav-link.active { border-left: none; border-bottom: 3px solid var(--primary); background: transparent; }
-            main { order: 1; height: calc(100vh - 68px); }
-            .header-bar { flex-direction: column; padding: 12px; gap: 8px; }
-            .search-bar { width: 100%; max-width: 100%; }
-            .mobile-balance-badge { display: block !important; background: rgba(0,255,136,0.1); border: 1px solid var(--success); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; color: var(--success); }
+        /* Aviator Flight Graph Line Simulation */
+        .flight-curve {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background: linear-gradient(to top right, rgba(239,68,68,0.1), transparent);
+            border-top: 2px solid rgba(239,68,68,0.4);
+            border-right: 2px solid rgba(239,68,68,0.4);
+            border-top-right-radius: 100%;
+            transform-origin: bottom left;
+            transition: all 0.1s linear;
         }
     </style>
 </head>
-<body>
+<body class="text-slate-200 min-h-screen flex flex-col unselected overflow-x-hidden">
 
-    <div id="login-screen">
-        <div class="login-box">
-            <div class="cyber-logo" style="width:65px; height:65px; margin: 0 auto 20px auto;">
-                <span>CM</span>
+    <!-- AVTO-KIRISH (AUTH) OYNASI -->
+    <div id="auth-screen" class="fixed inset-0 bg-[#0c0d14] z-50 flex items-center justify-center p-4">
+        <div class="bg-[#141622] w-full max-w-md rounded-2xl p-6 border border-red-500/20 shadow-2xl shadow-red-500/5 space-y-5">
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white text-2xl mx-auto shadow-lg shadow-red-600/30">
+                    <i class="fa-solid fa-plane-up"></i>
+                </div>
+                <h2 class="text-2xl font-bold tracking-wider text-white">AVIATOR BOT</h2>
+                <p class="text-xs text-slate-400">@smart_gemini tizimiga xush kelibsiz</p>
             </div>
-            <h1 class="text-primary" style="margin-bottom: 8px; font-size: 30px; letter-spacing: 1px;">CODE MARKET</h1>
-            <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 13px;">Raqamli kodlar va skriptlar dunyosiga xush kelibsiz</p>
             
-            <input type="text" id="login-nickname" placeholder="@username kiriting" style="margin-bottom: 18px; text-align: center; font-size: 16px; letter-spacing: 0.5px;" onkeypress="if(event.key === 'Enter') app.processLogin()">
-            <button onclick="app.processLogin()" style="width: 100%; padding: 14px; font-size: 15px;" class="active-btn">Kirish / Ro'yxatdan o'tish</button>
-            
-            <div class="author-credit">By Mironshoh</div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs text-slate-400 font-bold uppercase block mb-1">Ismingiz yoki Admin Kodu</label>
+                    <input type="text" id="auth-name" placeholder="Ismingizni kiriting..." class="w-full bg-[#1b1e30] border border-slate-750 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-red-500 transition">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 font-bold uppercase block mb-1">Telefon Raqamingiz</label>
+                    <input type="text" id="auth-phone" value="+998" class="w-full bg-[#1b1e30] border border-slate-750 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-red-500 transition">
+                </div>
+            </div>
+
+            <button onclick="processAuth()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-600/20 transition text-sm tracking-wider">O'YINNI BOSHLASH</button>
         </div>
     </div>
 
-    <div id="app-layout" class="hidden">
-        
-        <nav id="navbar">
-            <div class="nav-logo">
-                <div class="cyber-logo"><span>CM</span></div>
-                <span class="text-primary">CODE MARKET</span>
+    <!-- ASOSIY DASTUR -->
+    <div id="main-app" class="hidden flex-1 flex flex-col pb-24">
+        <header class="bg-[#141622] border-b border-slate-800 sticky top-0 z-40">
+            <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-red-900/30 border border-red-500/30 rounded-lg flex items-center justify-center text-red-500 font-bold">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-sm font-bold text-white leading-tight flex items-center gap-1" id="user-display-name">
+                            Foydalanuvchi
+                        </h1>
+                        <p class="text-[11px] text-amber-500 font-bold" id="user-display-role">Status: O'yinchi</p>
+                    </div>
+                </div>
+                <div class="bg-[#1b1e30] border border-red-500/20 rounded-xl px-4 py-1.5 text-right">
+                    <span class="text-[10px] text-slate-400 block uppercase font-bold tracking-wider">Balans</span>
+                    <span class="text-sm font-black text-red-500 font-digital" id="main-balance">0 UZS</span>
+                </div>
             </div>
-            <div class="nav-links">
-                <div class="nav-link active" onclick="app.navigate('home')"><span>🏠</span> Asosiy</div>
-                <div class="nav-link" onclick="app.navigate('new')"><span>🔥</span> Yangi Kodlar</div>
-                <div class="nav-link" onclick="app.navigate('categories')"><span>📁</span> Kategoriya</div>
-                <div class="nav-link" onclick="app.navigate('cart')"><span>🛒</span> Savat (<span id="cart-count">0</span>)</div>
-                <div class="nav-link" onclick="app.navigate('profile')"><span>👤</span> Profilim</div>
-                <div class="nav-link" onclick="app.navigate('settings')"><span>⚙         </span> Sozlamalar</div>
-                <div class="nav-link text-primary hidden" id="nav-admin" onclick="app.navigate('admin')"><span>👑</span> Admin Panel</div>
+        </header>
+
+        <main class="flex-1 max-w-md w-full mx-auto p-4 space-y-4">
+            
+            <!-- O'YIN EKRANI -->
+            <div id="tab-game" class="tab-content active space-y-4">
+                <div class="bg-[#141622] p-2 rounded-xl border border-slate-800 flex gap-1.5 overflow-x-auto text-[11px] font-bold" id="history-badges">
+                    <span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded">1.45x</span>
+                    <span class="bg-red-950 text-red-400 border border-red-900 px-2 py-0.5 rounded">8.20x</span>
+                    <span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded">2.10x</span>
+                </div>
+
+                <!-- AVIATOR SAMOLYOT OYNASI -->
+                <div class="bg-[#090a0f] rounded-2xl h-64 relative overflow-hidden flex flex-col items-center justify-center border border-slate-800 shadow-inner">
+                    <div class="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#ef4444_1px,transparent_1px),linear-gradient(to_bottom,#ef4444_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+                    
+                    <div id="flight-trail" class="flight-curve" style="width: 0%; height: 0%; opacity: 0;"></div>
+
+                    <div class="z-20 text-center relative mt-8">
+                        <span class="text-6xl font-black text-white tracking-tight font-digital drop-shadow-xl" id="live-multiplier">1.00x</span>
+                        <p class="text-xs text-red-500 uppercase font-bold tracking-widest mt-2 hidden animate-pulse" id="game-status-text">SAMOLYOT UCHMOQDA...</p>
+                    </div>
+
+                    <div class="absolute bottom-4 left-4 text-red-500 text-5xl opacity-0 z-30 plane-glow" id="plane-element">
+                        <i class="fa-solid fa-plane" style="transform: rotate(-15deg);"></i>
+                    </div>
+                </div>
+
+                <!-- TIKISH PANELI -->
+                <div class="bg-[#141622] p-4 rounded-2xl border border-slate-800 space-y-3">
+                    <div class="flex gap-2">
+                        <div class="relative flex-1">
+                            <span class="absolute left-3 top-2.5 text-xs text-slate-500 font-bold font-digital">UZS</span>
+                            <input type="number" id="bet-amount" value="2000" step="1000" class="w-full bg-[#1b1e30] border border-slate-700 rounded-xl pl-12 pr-3 py-2 text-sm font-bold text-white font-digital focus:outline-none">
+                        </div>
+                        <div class="flex gap-1 bg-[#1b1e30] p-1 rounded-xl border border-slate-750">
+                            <button onclick="adjustBet(5000)" class="px-2 text-xs font-bold text-slate-300 hover:bg-red-600 rounded-lg transition">+5k</button>
+                            <button onclick="adjustBet(20000)" class="px-2 text-xs font-bold text-slate-300 hover:bg-red-600 rounded-lg transition">+20k</button>
+                            <button onclick="adjustBet(50000)" class="px-2 text-xs font-bold text-slate-300 hover:bg-red-600 rounded-lg transition">+50k</button>
+                        </div>
+                    </div>
+
+                    <button id="main-bet-btn" onclick="handleBetAction()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-600/20 transition-all text-center flex flex-col items-center justify-center">
+                        <span class="text-lg tracking-wider font-black" id="btn-primary-text">TIKISH KIRITISH</span>
+                        <span class="text-xs text-green-200 font-normal mt-0.5" id="btn-sub-text">Parvoz startini kuting</span>
+                    </button>
+                </div>
             </div>
-            <div class="user-balance">
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Sizning balansingiz:</p>
-                <h2 class="text-primary" id="sidebar-balance" style="font-size: 22px;">0 Coin</h2>
-                <button onclick="app.openListingModal()" style="width: 100%; margin-top: 15px; font-size: 11px;" class="active-btn">+ E'lon Joylash</button>
+
+            <!-- TARIX -->
+            <div id="tab-history" class="tab-content space-y-4">
+                <div class="bg-[#141622] p-4 rounded-2xl border border-slate-800">
+                    <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i class="fa-solid fa-history text-red-500"></i> O'yinlar Tarixi</h3>
+                    <div class="divide-y divide-slate-800 max-h-64 overflow-y-auto" id="bets-history-list">
+                        <p class="text-xs text-slate-500 py-4 text-center">Hozircha ma'lumotlar mavjud emas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AKKAUNT -->
+            <div id="tab-account" class="tab-content space-y-4">
+                <div class="bg-[#141622] p-4 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex justify-between items-center bg-[#1b1e30] p-3 rounded-xl border border-slate-750">
+                        <div>
+                            <p class="text-xs text-slate-400">Mening Profilim</p>
+                            <p class="font-bold text-white text-sm mt-0.5" id="profile-name-show">-</p>
+                        </div>
+                        <span class="text-xs bg-red-600/10 border border-red-500/20 text-red-500 px-2.5 py-1 rounded-lg font-bold" id="profile-id-show">ID: 0</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="openDepositModal()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-wallet"></i> Pul Qo'shish
+                        </button>
+                        <button onclick="handleWithdrawal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-reply"></i> Pul Yechish
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB: SKRINSHOT BILAN 100% BIR XIL -->
+            <div id="tab-admin" class="tab-content space-y-4">
+                <div class="bg-[#141622] p-5 rounded-2xl border border-amber-500/40 space-y-5 shadow-2xl shadow-amber-600/10 relative overflow-hidden">
+                    
+                    <!-- Dekorativ fon -->
+                    <div class="absolute top-0 right-0 p-4 opacity-5">
+                        <i class="fa-solid fa-shield-halved text-8xl text-amber-500"></i>
+                    </div>
+
+                    <h3 class="text-base font-black text-amber-500 flex items-center gap-2 uppercase tracking-widest relative z-10">
+                        <i class="fa-solid fa-shield-halved"></i> TIZIM BOSHQARUV MARKAZI
+                    </h3>
+                    
+                    <div class="space-y-3 pt-2 relative z-10">
+                        <label class="text-xs text-slate-400 font-bold block">O'yin Algoritmi / RTP Nazorati</label>
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <button onclick="setAdminMode('low')" id="mode-low" class="bg-slate-800/80 text-slate-400 text-xs font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700 transition">TUSHIRISH (LOSS)</button>
+                            
+                            <!-- SKRINSHOTDAGI APELSIN RANG STANDART -->
+                            <button onclick="setAdminMode('normal')" id="mode-normal" class="bg-[#d97706] text-white text-xs font-bold py-3 rounded-xl border border-[#b45309] shadow-lg shadow-amber-600/20 transition">STANDART</button>
+                            
+                            <button onclick="setAdminMode('high')" id="mode-high" class="bg-slate-800/80 text-slate-400 text-xs font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700 transition">KO'TARISH (WIN)</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 border-t border-slate-800 pt-5 relative z-10">
+                        <label class="text-xs text-slate-400 font-bold block">Tizimdagi Foydalanuvchilar Ro'yxati (Jonli Ma'lumotlar)</label>
+                        <div class="bg-[#1b1e30] rounded-xl border border-slate-700 overflow-hidden shadow-inner">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                                    <tr>
+                                        <th class="p-3 font-bold">Ism / Tel</th>
+                                        <th class="p-3 font-bold text-center">Balans</th>
+                                        <th class="p-3 font-bold text-right">Amal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-users-list" class="divide-y divide-slate-700/50">
+                                    <!-- Dinamik foydalanuvchilar ro'yxati shu yerga tushadi -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <nav class="bg-[#141622] border-t border-slate-800 fixed bottom-0 left-0 right-0 z-40">
+            <div class="max-w-md mx-auto px-4 py-2 flex justify-between items-center text-slate-400">
+                <button onclick="switchTab('game')" id="nav-game" class="flex flex-col items-center gap-1 text-red-500 font-bold flex-1 transition">
+                    <i class="fa-solid fa-gamepad text-lg"></i><span class="text-[10px]">O'yin</span>
+                </button>
+                <button onclick="switchTab('history')" id="nav-history" class="flex flex-col items-center gap-1 font-bold flex-1 transition">
+                    <i class="fa-solid fa-list text-lg"></i><span class="text-[10px]">Tarix</span>
+                </button>
+                <button onclick="switchTab('account')" id="nav-account" class="flex flex-col items-center gap-1 font-bold flex-1 transition">
+                    <i class="fa-solid fa-user text-lg"></i><span class="text-[10px]">Akkaunt</span>
+                </button>
+                <button onclick="switchTab('admin')" id="nav-admin" class="flex-col items-center gap-1 font-bold flex-1 hidden text-amber-500 transition hover:text-amber-400">
+                    <i class="fa-solid fa-shield-halved text-lg"></i><span class="text-[10px]">Admin</span>
+                </button>
             </div>
         </nav>
-
-        <main>
-            <div id="broadcast-banner" class="hidden"></div>
-            
-            <div class="header-bar">
-                <div class="flex items-center justify-between" style="width: 100%; max-width: 200px; min-width: auto;">
-                    <h2 id="page-title" style="font-size: 18px; font-weight: 800; letter-spacing: 0.5px;">BOSH SAHIFA</h2>
-                    <div class="mobile-balance-badge" style="display: none;"><span id="mobile-bal-val">0</span> 🪙</div>
-                </div>
-                <div class="search-bar">
-                    <input type="text" id="global-search" placeholder="Skript, bot yoki loyihalarni qidirish..." onkeyup="app.triggerSearch()">
-                </div>
-                <div class="desktop-action-zone" style="display:block;">
-                    <button onclick="app.openListingModal()" id="mobile-add-btn" style="display:none; padding: 8px 12px; font-size: 11px;">+ E'lon</button>
-                </div>
-            </div>
-
-            <div class="page-content" id="content-area">
-                </div>
-        </main>
     </div>
 
-    <div id="modal-add" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header text-primary">YANGI RAQAMLI E'LON JOYLASHTIRISH</div>
-            
-            <div class="form-group">
-                <label>Skript / Kod Nomi *</label>
-                <input type="text" id="add-title" placeholder="Masalan: Telegram Premium Auto-Bot">
+    <!-- Deposit Modal (O'zgarmagan) -->
+    <div id="deposit-modal" class="fixed inset-0 bg-[#090a0f]/90 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-[#141622] w-full max-w-sm rounded-2xl p-6 space-y-5 border border-slate-800 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-white text-sm uppercase tracking-wider">Hisob To'ldirish</h3>
+                <button onclick="closeDepositModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            
-            <div class="form-group flex gap-4">
-                <div style="flex: 1;">
-                    <label>Mukammal Kategoriya *</label>
-                    <select id="add-cat">
-                        <option value="bot">🤖 Telegram Botlar</option>
-                        <option value="site">🌐 Web Saytlar</option>
-                        <option value="mobile">📱 Mobil Ilovalar</option>
-                        <option value="game">🎮 O'yin Skriptlari</option>
-                        <option value="module">🛠 Modullar & API</option>
-                    </select>
+            <div class="text-center py-4 space-y-4">
+                <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center text-blue-500 mx-auto">
+                    <i class="fa-brands fa-telegram text-3xl"></i>
                 </div>
-                <div style="flex: 1;">
-                    <label>Narx turi *</label>
-                    <div class="radio-tile-group">
-                        <div class="radio-tile selected" id="tile-fixed" onclick="app.setPriceType('fixed')">Qat'iy</div>
-                        <div class="radio-tile" id="tile-nego" onclick="app.setPriceType('nego')">Kelishiladi</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Asosiy Narx (Coin) *</label>
-                <input type="number" id="add-price" placeholder="Masalan: 15" oninput="app.calculateTax()">
-                <span class="calc-info" id="tax-notice">Xaridor ko'radigan yakuniy narx: 0 Coin (Tizim komissiyasi: +6%)</span>
-            </div>
-
-            <div class="form-group flex gap-4">
-                <div style="flex:1;">
-                    <label>Telegram Username *</label>
-                    <input type="text" id="add-tg" placeholder="@Mironshoh_Dev">
-                </div>
-                <div style="flex:1;">
-                    <label>Telefon Raqam *</label>
-                    <input type="text" id="add-phone" placeholder="+998901234567">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Kod taqdim etish usuli *</label>
-                <select id="add-delivery-type" onchange="app.toggleDeliveryFields()">
-                    <option value="link">GitHub yoki Yuklab olish havolasi (Link)</option>
-                    <option value="raw">Skript kodini to'liq joylash (Copy-Paste)</option>
-                </select>
-            </div>
-
-            <div class="form-group" id="delivery-link-wrapper">
-                <label>GitHub yoki Yuklab olish havolasi</label>
-                <input type="text" id="add-link" placeholder="https://github.com/user/repo">
-            </div>
-
-            <div class="form-group hidden" id="delivery-raw-wrapper">
-                <label>Skript kodi (Raw Code Text)</label>
-                <textarea id="add-raw-code" rows="5" placeholder="Sotib olingandan keyin nusxalash uchun to'liq kod strukturasi..." style="font-family: monospace; font-size:12px;"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Mahsulot Muqova Rasmi (Fayl Yuklash) *</label>
-                <input type="file" id="add-file-img" accept="image/*" style="padding:8px;">
-            </div>
-
-            <div class="form-group">
-                <label>Batafsil Tavsif *</label>
-                <textarea id="add-desc" rows="3" placeholder="Skript qanday funksiyalarga ega, qaysi dasturlash tilida yozilgan..."></textarea>
-            </div>
-
-            <div class="flex gap-2" style="margin-top: 25px;">
-                <button style="flex: 1; border-color: var(--text-muted); color: var(--text-muted);" onclick="app.closeModal('modal-add')">Bekor Qilish</button>
-                <button style="flex: 1;" class="active-btn" onclick="app.executePublish()">Bozorga Chiqarish</button>
+                <p class="text-sm text-slate-300">To'lovni amalga oshirish va cheklarni tasdiqlash uchun rasmiy botimiz adminiga yozing.</p>
+                <a href="https://t.me/smart_gemini" target="_blank" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20">
+                    ADMIN GA YOZISH (@smart_gemini)
+                </a>
             </div>
         </div>
     </div>
 
-<script>
-// --- CORE BUSINESS LOGIC (LOCALSTORAGE ENGINE) ---
+    <script>
+        // BAZA: Barcha ro'yxatdan o'tganlarni localStorage da saqlaymiz
+        let usersDB = JSON.parse(localStorage.getItem('aviatorUsersDB_v2')) || [];
+        function saveDB() { localStorage.setItem('aviatorUsersDB_v2', JSON.stringify(usersDB)); }
 
-const DB_KEY = 'codeMarket_v5_DB';
+        // Game & User States
+        let userData = { id: null, name: '', phone: '', balance: 0, isAdmin: false, createdAt: 0 };
+        let isPlaying = false, isBetPlaced = false;
+        let currentMultiplier = 1.00, crashPoint = 2.00;
+        let gameInterval = null;
+        let systemAlgMode = 'normal';
 
-// Tizim boshlang'ich holatda mutlaqo bo'sh bo'ladi (Hech qanday dummy e'lonlarsiz)
-const initialBlankDB = {
-    users: {
-        'admin': { balance: 1000, purchases: [], cart: [], myListings: [], isBlocked: false, theme: 'neon' }
-    },
-    listings: [],
-    stats: { totalTurnover: 0 },
-    broadcast: ""
-};
+        // Auth Logic (Tizimga kirish)
+        function processAuth() {
+            const nameInput = document.getElementById('auth-name').value.trim();
+            const phoneInput = document.getElementById('auth-phone').value.trim();
 
-const app = {
-    db: {},
-    currentUser: null,
-    currentTab: 'home',
-    selectedPriceType: 'fixed',
-
-    init() {
-        const rawData = localStorage.getItem(DB_KEY);
-        if (rawData) {
-            app.db = JSON.parse(rawData);
-        } else {
-            app.db = JSON.parse(JSON.stringify(initialBlankDB));
-            app.saveState();
-        }
-
-        // Sessiyani tekshirish
-        const activeSession = sessionStorage.getItem('cm_active_user');
-        if (activeSession && app.db.users[activeSession]) {
-            app.currentUser = activeSession;
-            app.applySelectedTheme(app.db.users[activeSession].theme || 'neon');
-            app.bootApplication();
-        } else {
-            document.getElementById('login-screen').classList.remove('hidden');
-        }
-
-        // Mobil moslashuvni tekshirish
-        if (window.innerWidth <= 768) {
-            document.getElementById('mobile-add-btn').style.display = 'block';
-        }
-    },
-
-    saveState() {
-        localStorage.setItem(DB_KEY, JSON.stringify(app.db));
-    },
-
-    processLogin() {
-        const nickInput = document.getElementById('login-nickname');
-        const username = nickInput.value.trim().toLowerCase().replace('@', '');
-
-        if (username.length < 3) {
-            alert("Nickname xato! Kamida 3 ta belgidan iborat bo'lishi lozim.");
-            return;
-        }
-
-        if (!app.db.users[username]) {
-            // Yangi foydalanuvchiga ro'yxatdan o'tgani uchun aniq 10 Coin bonus beriladi
-            app.db.users[username] = {
-                balance: 10,
-                purchases: [],
-                cart: [],
-                myListings: [],
-                isBlocked: false,
-                theme: 'neon'
-            };
-            app.saveState();
-            alert(`Xush kelibsiz! Yangi hisob yaratildi va balansga 10 Coin bonus qo'shildi!`);
-        } else if (app.db.users[username].isBlocked) {
-            alert("Ushbu foydalanuvchi tizim ma'muri (Admin) tomonidan bloklangan!");
-            return;
-        }
-
-        app.currentUser = username;
-        sessionStorage.setItem('cm_active_user', username);
-        app.applySelectedTheme(app.db.users[username].theme);
-        app.bootApplication();
-    },
-
-    bootApplication() {
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('app-layout').classList.remove('hidden');
-        
-        if (app.currentUser === 'admin') {
-            document.getElementById('nav-admin').classList.remove('hidden');
-        } else {
-            document.getElementById('nav-admin').classList.add('hidden');
-        }
-
-        app.refreshGlobalMetrics();
-        app.navigate('home');
-    },
-
-    logout() {
-        sessionStorage.removeItem('cm_active_user');
-        app.currentUser = null;
-        document.getElementById('app-layout').classList.add('hidden');
-        document.getElementById('login-screen').classList.remove('hidden');
-        document.getElementById('login-nickname').value = '';
-    },
-
-    refreshGlobalMetrics() {
-        const profile = app.db.users[app.currentUser];
-        document.getElementById('sidebar-balance').innerText = profile.balance + ' Coin';
-        document.getElementById('mobile-bal-val').innerText = profile.balance;
-        document.getElementById('cart-count').innerText = profile.cart.length;
-
-        const banner = document.getElementById('broadcast-banner');
-        if (app.db.broadcast && app.db.broadcast.length > 0) {
-            banner.innerText = "📢 E'LON: " + app.db.broadcast;
-            banner.classList.remove('hidden');
-        } else {
-            banner.classList.add('hidden');
-        }
-    },
-
-    navigate(tab) {
-        app.currentTab = tab;
-        
-        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-        const matchedLink = Array.from(document.querySelectorAll('.nav-link')).find(el => el.getAttribute('onclick').includes(`'${tab}'`));
-        if (matchedLink) matchedLink.classList.add('active');
-
-        const titleMap = {
-            'home': 'BOSH SAHIFA',
-            'new': '🔥 YANGI KODLAR',
-            'categories': '📁 KATEGORIYALAR',
-            'cart': '🛒 SAVATIM',
-            'profile': '👤 PROFIL TARIXI',
-            'settings': '⚙️ SOZLAMALAR',
-            'admin': '👑 ADMIN STRUKTURASI'
-        };
-        document.getElementById('page-title').innerText = titleMap[tab] || 'MARKET';
-        app.buildTabContent(tab);
-    },
-
-    buildTabContent(tab) {
-        const stage = document.getElementById('content-area');
-        stage.innerHTML = '';
-
-        switch (tab) {
-            case 'home':
-                stage.innerHTML = app.compileGrid(app.db.listings);
-                break;
-            case 'new':
-                // Eng oxirgi yuklangan 5 ta mahsulot ro'yxati
-                const freshList = [...app.db.listings].sort((a,b) => b.timestamp - a.timestamp).slice(0, 5);
-                stage.innerHTML = app.compileGrid(freshList);
-                break;
-            case 'categories':
-                stage.innerHTML = `
-                    <div class="flex gap-2" style="overflow-x:auto; padding-bottom:10px; margin-bottom: 20px;">
-                        <button onclick="app.switchCategoryView('bot', this)" class="active-btn">🤖 Botlar</button>
-                        <button onclick="app.switchCategoryView('site', this)">🌐 Saytlar</button>
-                        <button onclick="app.switchCategoryView('mobile', this)">📱 Ilovalar</button>
-                        <button onclick="app.switchCategoryView('game', this)">🎮 O'yinlar</button>
-                        <button onclick="app.switchCategoryView('module', this)">🛠 Modullar</button>
-                    </div>
-                    <div id="category-segmented-stage"></div>
-                `;
-                app.switchCategoryView('bot', document.querySelector('#content-area button'));
-                break;
-            case 'cart':
-                const userCart = app.db.users[app.currentUser].cart;
-                const itemsInCart = app.db.listings.filter(l => userCart.includes(l.id));
-                if(itemsInCart.length === 0) {
-                    stage.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:40px;">Savatingiz hozircha bo'sh.</p>`;
-                } else {
-                    let totalCartCost = itemsInCart.reduce((acc, obj) => acc + obj.buyerFinalPrice, 0);
-                    stage.innerHTML = `
-                        <div style="background: rgba(255,42,95,0.06); border:1px solid var(--primary); padding:15px; border-radius:10px; margin-bottom:20px;">
-                            <h3>Savatdagi jami xarid qiymati: <span class="text-primary">${totalCartCost} Coin</span></h3>
-                        </div>
-                        ${app.compileGrid(itemsInCart)}
-                    `;
-                }
-                break;
-            case 'profile':
-                const usr = app.db.users[app.currentUser];
-                const boughtItems = app.db.listings.filter(l => usr.purchases.includes(l.id));
-                const uploadedItems = app.db.listings.filter(l => l.owner === app.currentUser);
-
-                stage.innerHTML = `
-                    <div style="background:var(--panel-bg); border:1px solid var(--border); padding:20px; border-radius:12px; margin-bottom:25px;">
-                        <h3>Foydalanuvchi: <span class="text-primary">@${app.currentUser}</span></h3>
-                        <p style="color:var(--text-muted); margin-top:5px;">Joriy balans: <b>${usr.balance} Coin</b></p>
-                    </div>
-                    
-                    <h3 style="margin-top:15px; border-left:3px solid var(--success); padding-left:10px;">📥 SOTIB OLINGAN SKRIPTLAR (${boughtItems.length})</h3>
-                    <div style="margin-bottom:30px; margin-top:15px;">
-                        ${boughtItems.length > 0 ? boughtItems.map(item => `
-                            <div class="list-item flex-col items-start gap-2">
-                                <div class="flex justify-between" style="width:100%;">
-                                    <b class="text-primary" style="font-size:16px;">${item.title}</b>
-                                    <span style="color:var(--success); font-weight:bold;">Sotib olindi</span>
-                                </div>
-                                <p style="font-size:12px; color:var(--text-muted);">Sotuvchi aloqa: ${item.tgUsername} | Tel: ${item.phoneNumber}</p>
-                                
-                                <div style="width:100%; margin-top:8px; padding-top:8px; border-top:1px dashed var(--border);">
-                                    ${item.deliveryMode === 'link' 
-                                        ? `<a href="${item.sourceLink}" target="_blank" style="color:var(--success); font-size:13px; text-decoration:none; font-weight:bold;">📂 GitHub / Yuklab olish havolasiga o'tish →</a>`
-                                        : `<label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px;">Skript kodi:</label>
-                                           <textarea readonly style="font-family:monospace; font-size:11px; height:80px; background:#000;" onclick="this.select()">${item.sourceRawCode}</textarea>`
-                                    }
-                                </div>
-                            </div>
-                        `).join('') : '<p style="color:var(--text-muted); font-size:13px; padding:10px 0;">Siz hali skript xarid qilmadingiz.</p>'}
-                    </div>
-
-                    <h3 style="border-left:3px solid var(--primary); padding-left:10px;">📤 MENING E'LONLARIM (${uploadedItems.length})</h3>
-                    ${app.compileGrid(uploadedItems)}
-                `;
-                break;
-            case 'settings':
-                stage.innerHTML = `
-                    <div style="max-width:480px; margin: 0 auto;">
-                        <h3 style="margin-bottom:15px;">Tizim Neon Dizayn Mavzusi</h3>
-                        <div class="flex flex-col gap-2" style="margin-bottom:30px;">
-                            <button onclick="app.updateTheme('neon')" class="active-btn" style="background:#ff2a5f; color:#000; border:none;">Mavzu 1: Neon Qizil</button>
-                            <button onclick="app.updateTheme('cyber')" style="background:#00f3ff; color:#000; border:none;">Mavzu 2: Kiber Firuza</button>
-                            <button onclick="app.updateTheme('minimalist')" style="background:#e5e5e5; color:#000; border:none;">Mavzu 3: Minimalist To'q Oq</button>
-                        </div>
-                        <div style="border-top:1px solid var(--border); padding-top:20px;">
-                            <button onclick="app.logout()" style="width:100%; border-color:var(--danger); color:var(--danger);">Tizimdan Butunlay Chiqish</button>
-                        </div>
-                    </div>
-                `;
-                break;
-            case 'admin':
-                if(app.currentUser !== 'admin') return;
-                stage.innerHTML = `
-                    <div class="flex gap-4" style="margin-bottom:25px;">
-                        <div style="flex:1; background:var(--panel-bg); padding:15px; border-radius:10px; border:1px solid var(--border);">
-                            <span style="font-size:12px; color:var(--text-muted);">Jami Ro'yxatdan o'tganlar</span>
-                            <h2>${Object.keys(app.db.users).length} ta user</h2>
-                        </div>
-                        <div style="flex:1; background:var(--panel-bg); padding:15px; border-radius:10px; border:1px solid var(--border);">
-                            <span style="font-size:12px; color:var(--text-muted);">Faol E'lonlar</span>
-                            <h2>${app.db.listings.length} ta kod</h2>
-                        </div>
-                        <div style="flex:1; background:var(--panel-bg); padding:15px; border-radius:10px; border:1px solid var(--primary);">
-                            <span style="font-size:12px; color:var(--text-muted);">Umumiy Aylanma</span>
-                            <h2 class="text-primary">${app.db.stats.totalTurnover} Coin</h2>
-                        </div>
-                    </div>
-
-                    <div style="background:var(--panel-bg); border:1px solid var(--border); padding:20px; border-radius:12px; margin-bottom:20px;">
-                        <h3>💰 Foydalanuvchilar Balansini va Holatini Boshqarish</h3>
-                        <div class="flex flex-col gap-2" style="margin-top:12px;">
-                            <input type="text" id="adm-target-user" placeholder="User nickname (masalan: mironshoh)">
-                            <input type="number" id="adm-amount" placeholder="Coin miqdori (ayirish uchun minus belgisidan foydalaning)">
-                            <div class="flex gap-2">
-                                <button onclick="app.admModifyWallet()" style="flex:1;" class="active-btn">Balansni Yangilash</button>
-                                <button onclick="app.admToggleBlock()" style="flex:1; border-color:var(--danger); color:var(--danger);">Bloklash / Ochish</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="background:var(--panel-bg); border:1px solid var(--border); padding:20px; border-radius:12px;">
-                        <h3>📢 Global Broadcast Banner o'rnatish</h3>
-                        <div class="flex gap-2" style="margin-top:12px;">
-                            <input type="text" id="adm-banner-msg" placeholder="Banner matni..." value="${app.db.broadcast}">
-                            <button onclick="app.admPublishBroadcast()" class="active-btn">E'lon Berish</button>
-                        </div>
-                    </div>
-                `;
-                break;
-        }
-    },
-
-    compileGrid(items) {
-        if (!items || items.length === 0) {
-            return `<div style="width:100%; text-align:center; padding:50px 0; color:var(--text-muted);">Siz qidirayotgan bo'limda hozircha hech qanday e'lon mavjud emas.</div>`;
-        }
-
-        let codeBlock = `<div class="listings-grid">`;
-        items.forEach(el => {
-            const hasInCart = app.db.users[app.currentUser].cart.includes(el.id);
-            const clearPurchase = app.db.users[app.currentUser].purchases.includes(el.id);
-            const stateOwner = el.owner === app.currentUser || app.currentUser === 'admin';
-            const catEmoji = el.category === 'bot' ? '🤖' : el.category === 'site' ? '🌐' : el.category === 'mobile' ? '📱' : el.category === 'game' ? '🎮' : '🛠';
-
-            codeBlock += `
-                <div class="card">
-                    <div class="card-img-wrapper">
-                        <img src="${el.base64Img}" class="card-img" onerror="this.src='https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=400&q=80'">
-                    </div>
-                    <div class="card-body">
-                        <div class="card-cat">${catEmoji} ${el.category}</div>
-                        <div class="card-title">${el.title}</div>
-                        <div class="card-desc">${el.desc.substring(0, 75)}...</div>
-                        
-                        <div class="card-meta">
-                            Sotuvchi: @${el.owner}<br>
-                            Tel: ${el.phoneNumber}<br>
-                            Turi: ${el.priceStyle === 'fixed' ? '🔒 Qat\'iy Narx' : '🤝 Kelishiladi'}
-                        </div>
-
-                        <div class="card-footer">
-                            <span class="card-price">${el.buyerFinalPrice} Coin</span>
-                        </div>
-
-                        <div class="card-actions">
-                            ${clearPurchase 
-                                ? `<button style="flex:2; border-color:var(--success); color:var(--success);" onclick="app.navigate('profile')">Yuklab Olish</button>`
-                                : `<button class="active-btn" style="flex:2;" onclick="app.triggerPurchase(${el.id})">Sotib olish</button>`
-                            }
-                            <button class="btn-icon" onclick="app.cartToggle(${el.id})" style="${hasInCart ? 'background:var(--primary); color:#000;' : ''}">
-                                ${hasInCart ? '🗑' : '🛒'}
-                            </button>
-                            ${stateOwner ? `<button class="btn-icon" style="border-color:var(--danger); color:var(--danger);" onclick="app.removeListing(${el.id})">✖</button>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        codeBlock += `</div>`;
-        return codeBlock;
-    },
-
-    switchCategoryView(categoryKey, btnElement) {
-        const parent = btnElement.parentElement;
-        parent.querySelectorAll('button').forEach(b => b.classList.remove('active-btn'));
-        btnElement.classList.add('active-btn');
-
-        const targetedListings = app.db.listings.filter(l => l.category === categoryKey);
-        document.getElementById('category-segmented-stage').innerHTML = app.compileGrid(targetedListings);
-    },
-
-    triggerSearch() {
-        const query = document.getElementById('global-search').value.toLowerCase().trim();
-        if(app.currentTab !== 'home') app.navigate('home');
-
-        if(query.length < 2) {
-            app.buildTabContent('home');
-            return;
-        }
-
-        const standardResult = app.db.listings.filter(l => 
-            l.title.toLowerCase().includes(query) || 
-            l.desc.toLowerCase().includes(query) ||
-            l.owner.toLowerCase().includes(query)
-        );
-        document.getElementById('content-area').innerHTML = app.compileGrid(standardResult);
-    },
-
-    // --- DIALOG MODAL MEXANIZMI ---
-    openListingModal() {
-        document.getElementById('modal-add').classList.remove('hidden');
-        document.getElementById('add-title').value = '';
-        document.getElementById('add-price').value = '';
-        document.getElementById('add-tg').value = '';
-        document.getElementById('add-phone').value = '';
-        document.getElementById('add-link').value = '';
-        document.getElementById('add-raw-code').value = '';
-        document.getElementById('add-file-img').value = '';
-        document.getElementById('add-desc').value = '';
-        document.getElementById('tax-notice').innerText = "Xaridor ko'radigan yakuniy narx: 0 Coin (Tizim komissiyasi: +6%)";
-        app.setPriceType('fixed');
-    },
-
-    closeModal(id) {
-        document.getElementById(id).classList.add('hidden');
-    },
-
-    setPriceType(type) {
-        app.selectedPriceType = type;
-        if(type === 'fixed') {
-            document.getElementById('tile-fixed').classList.add('selected');
-            document.getElementById('tile-nego').classList.remove('selected');
-        } else {
-            document.getElementById('tile-nego').classList.add('selected');
-            document.getElementById('tile-fixed').classList.remove('selected');
-        }
-    },
-
-    toggleDeliveryFields() {
-        const option = document.getElementById('add-delivery-type').value;
-        if(option === 'link') {
-            document.getElementById('delivery-link-wrapper').classList.remove('hidden');
-            document.getElementById('delivery-raw-wrapper').classList.add('hidden');
-        } else {
-            document.getElementById('delivery-link-wrapper').classList.add('hidden');
-            document.getElementById('delivery-raw-wrapper').classList.remove('hidden');
-        }
-    },
-
-    calculateTax() {
-        const rawNum = parseInt(document.getElementById('add-price').value) || 0;
-        // Matematik 6% avto-komissiya hisoblash formulasi
-        const combinedNum = Math.ceil(rawNum * 1.06);
-        document.getElementById('tax-notice').innerText = `Xaridor ko'radigan yakuniy narx: ${combinedNum} Coin (Tizim komissiyasi: +6%)`;
-    },
-
-    executePublish() {
-        const title = document.getElementById('add-title').value.trim();
-        const category = document.getElementById('add-cat').value;
-        const basePrice = parseInt(document.getElementById('add-price').value);
-        const tgUsername = document.getElementById('add-tg').value.trim();
-        const phoneNumber = document.getElementById('add-phone').value.trim();
-        const deliveryMode = document.getElementById('add-delivery-type').value;
-        const sourceLink = document.getElementById('add-link').value.trim();
-        const sourceRawCode = document.getElementById('add-raw-code').value.trim();
-        const imageFile = document.getElementById('add-file-img').files[0];
-        const desc = document.getElementById('add-desc').value.trim();
-
-        if (!title || !basePrice || !tgUsername || !phoneNumber || !desc) {
-            alert("Iltimos, barcha majburiy yulduzcha (*) belgili maydonlarni to'ldiring!");
-            return;
-        }
-
-        if (deliveryMode === 'link' && !sourceLink) {
-            alert("Iltimos, loyihaga tegishli GitHub yoki yuklab olish havolasini kiriting!");
-            return;
-        }
-        if (deliveryMode === 'raw' && !sourceRawCode) {
-            alert("Iltimos, skript kodini matn maydoniga to'liq nusxalab joylang!");
-            return;
-        }
-
-        const buyerFinalPrice = Math.ceil(basePrice * 1.06);
-
-        const buildObjectAndSave = (base64String) => {
-            const newObject = {
-                id: Date.now(),
-                title, category, priceStyle: app.selectedPriceType, basePrice, buyerFinalPrice,
-                tgUsername, phoneNumber, deliveryMode, sourceLink, sourceRawCode,
-                base64Img: base64String || '', desc, owner: app.currentUser, timestamp: Date.now()
-            };
-
-            app.db.listings.unshift(newObject);
-            app.db.users[app.currentUser].myListings.push(newObject.id);
-            app.saveState();
-            app.closeModal('modal-add');
-            app.refreshGlobalMetrics();
-            app.navigate('home');
-            alert("E'loningiz muvaffaqiyatli tekshirildi va bozor platformasiga joylashtirildi!");
-        };
-
-        // Rasmni local Base64 formatga o'tkazish mantiqi
-        if (imageFile) {
-            const reader = new FileReader();
-            reader.onloadend = function () {
-                buildObjectAndSave(reader.result);
-            };
-            reader.readAsDataURL(imageFile);
-        } else {
-            buildObjectAndSave('');
-        }
-    },
-
-    triggerPurchase(id) {
-        const targetObj = app.db.listings.find(l => l.id === id);
-        if(!targetObj) return;
-
-        if(targetObj.owner === app.currentUser) {
-            alert("O'zingiz joylagan mahsulotni o'zingiz sotib ololmaysiz!");
-            return;
-        }
-
-        const client = app.db.users[app.currentUser];
-        if(client.purchases.includes(id)) {
-            alert("Siz bu skriptni avval xarid qilgansiz! Yuklab olish 'Profilim' bo'limida faol.");
-            return;
-        }
-
-        if (client.balance < targetObj.buyerFinalPrice) {
-            alert(`Mablag' yetarli emas! Sizga yana ${targetObj.buyerFinalPrice - client.balance} Coin kerak.`);
-            return;
-        }
-
-        if (confirm(`"${targetObj.title}" mahsulotini ${targetObj.buyerFinalPrice} Coin evaziga sotib olishni tasdiqlaysizmi?`)) {
-            // Balansdan yechish va sotuvchiga o'tkazish
-            client.balance -= targetObj.buyerFinalPrice;
-            client.purchases.push(id);
-
-            if (app.db.users[targetObj.owner]) {
-                app.db.users[targetObj.owner].balance += targetObj.basePrice; 
+            if (!nameInput || phoneInput.length < 4) {
+                alert("Iltimos, ismingiz va raqamingizni to'liq kiriting!");
+                return;
             }
 
-            // Global tizim aylanmasiga qo'shish
-            app.db.stats.totalTurnover += targetObj.buyerFinalPrice;
+            // @smart_gemini paroli tekshiruvi
+            let checkIsAdmin = (nameInput === "@smart_gemini" || phoneInput === "@smart_gemini" || nameInput === "8355669630");
+
+            let existingUserIndex = usersDB.findIndex(u => u.phone === phoneInput && u.name === nameInput);
+
+            if (existingUserIndex > -1) {
+                // Eskisini yuklash
+                userData = usersDB[existingUserIndex];
+                if (checkIsAdmin && !userData.isAdmin) {
+                    userData.isAdmin = true;
+                    userData.balance = 4916888; // Skrinshotdagi balans
+                    usersDB[existingUserIndex] = userData;
+                }
+            } else {
+                // Yangi qo'shish
+                userData = {
+                    id: Date.now().toString(),
+                    name: checkIsAdmin ? "Bosh Admin 👑" : nameInput,
+                    phone: phoneInput,
+                    balance: checkIsAdmin ? 4916888 : 0, 
+                    isAdmin: checkIsAdmin,
+                    createdAt: Date.now() // Qachon ro'yxatdan o'tgani
+                };
+                usersDB.push(userData);
+            }
+            saveDB();
+
+            // Interfeysni yangilash
+            if (userData.isAdmin) {
+                document.getElementById('user-display-name').innerHTML = `${userData.name}`;
+                document.getElementById('user-display-role').innerHTML = `Status: Tizim Admini <i class="fa-solid fa-hammer"></i>`;
+                document.getElementById('nav-admin').classList.remove('hidden');
+                document.getElementById('nav-admin').classList.add('flex');
+            } else {
+                document.getElementById('user-display-name').innerText = userData.name;
+                document.getElementById('user-display-role').innerHTML = `Status: O'yinchi <i class="fa-solid fa-check text-green-500"></i>`;
+            }
+
+            document.getElementById('profile-name-show').innerText = userData.name;
+            document.getElementById('profile-id-show').innerText = "ID: " + userData.id.slice(-5);
+            updateBalanceUI();
+
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+        }
+
+        function updateBalanceUI() {
+            document.getElementById('main-balance').innerText = userData.balance.toLocaleString() + ' UZS';
+            if (userData.id) {
+                let userIdx = usersDB.findIndex(u => u.id === userData.id);
+                if (userIdx > -1) {
+                    usersDB[userIdx].balance = userData.balance;
+                    saveDB();
+                }
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            const tabs = ['game', 'history', 'account', 'admin'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('nav-' + t);
+                if(!btn) return;
+                if(t === tabId) {
+                    btn.classList.add(t === 'admin' ? 'text-amber-500' : 'text-red-500');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    btn.classList.remove('text-red-500', 'text-amber-500');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+
+            if(tabId === 'admin' && userData.isAdmin) {
+                renderAdminUsers();
+            }
+        }
+
+        // --- ADMIN PANEL FUNKSIYALARI ---
+        function renderAdminUsers() {
+            const list = document.getElementById('admin-users-list');
+            if(!list) return;
+            list.innerHTML = '';
+
+            let sortedUsers = [...usersDB].sort((a,b) => b.createdAt - a.createdAt); // Eng yangilar tepada
+
+            sortedUsers.forEach(user => {
+                const tr = document.createElement('tr');
+                
+                // Yangi qo'shilganlarni ajratib ko'rsatish (Oxirgi 15 minutda kirgan bo'lsa)
+                let isNewUser = (Date.now() - user.createdAt) < (15 * 60 * 1000);
+                let badge = isNewUser ? `<span class="bg-green-500/20 text-green-400 border border-green-500/30 text-[9px] px-1.5 py-0.5 rounded ml-1 font-bold animate-pulse uppercase tracking-wider">Yangi</span>` : '';
+
+                let amallarCode = user.isAdmin 
+                    ? `<span class="bg-amber-500/20 text-amber-500 text-[10px] font-bold px-3 py-1.5 rounded border border-amber-500/30">ADMIN</span>`
+                    : `<div class="flex justify-end gap-1.5">
+                        <button onclick="adminManageBal('${user.id}', true)" class="bg-green-600 hover:bg-green-500 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm transition shadow-lg shadow-green-600/20">+</button>
+                        <button onclick="adminManageBal('${user.id}', false)" class="bg-red-600 hover:bg-red-500 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm transition shadow-lg shadow-red-600/20">-</button>
+                       </div>`;
+
+                tr.innerHTML = `
+                    <td class="p-3">
+                        <div class="font-bold text-white text-[13px] flex items-center">${user.name} ${badge}</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">${user.phone}</div>
+                    </td>
+                    <td class="p-3 text-center font-bold text-white text-[12px]">${user.balance.toLocaleString()} UZS</td>
+                    <td class="p-3 text-right">${amallarCode}</td>
+                `;
+                list.appendChild(tr);
+            });
+        }
+
+        // PULL QO'SHISH (100% ISHLAYDI)
+        function adminManageBal(userId, isAdd) {
+            let userIndex = usersDB.findIndex(u => u.id === userId);
+            if(userIndex === -1) return;
+
+            let ism = usersDB[userIndex].name;
+            let currentBal = usersDB[userIndex].balance;
+
+            let summaStr = prompt(isAdd 
+                ? `Diqqat: ${ism} ga QANCHA PUL QO'SHMOQCHISIZ? (UZS)\nHozirgi balansi: ${currentBal.toLocaleString()} UZS` 
+                : `Diqqat: ${ism} dan QANCHA PUL AYIRMOQCHISIZ? (UZS)\nHozirgi balansi: ${currentBal.toLocaleString()} UZS`);
             
-            // Savatdan tozalash
-            client.cart = client.cart.filter(cId => cId !== id);
+            if(!summaStr) return;
+            
+            let summa = parseInt(summaStr.replace(/[^0-9]/g, '')); // Faqat raqamlarni oladi
+            if(isNaN(summa) || summa <= 0) {
+                alert("Xato: Noto'g'ri raqam kiritildi!");
+                return;
+            }
 
-            app.saveState();
-            app.refreshGlobalMetrics();
-            app.navigate('profile');
-            alert("Tabriklaymiz! Xarid yakunlandi. Kod va havolalar profilingizda ochildi.");
+            if(isAdd) {
+                usersDB[userIndex].balance += summa;
+                alert(`Muvaffaqiyatli! ${ism} ning hisobiga ${summa.toLocaleString()} UZS qo'shildi.`);
+            } else {
+                usersDB[userIndex].balance = Math.max(0, usersDB[userIndex].balance - summa);
+                alert(`Muvaffaqiyatli! ${ism} ning hisobidan ${summa.toLocaleString()} UZS olib tashlandi.`);
+            }
+            
+            saveDB();
+            renderAdminUsers(); // Jadvalni srazi yangilaydi
         }
-    },
 
-    cartToggle(id) {
-        const user = app.db.users[app.currentUser];
-        const insideIndex = user.cart.indexOf(id);
-        if (insideIndex === -1) {
-            user.cart.push(id);
-        } else {
-            user.cart.splice(insideIndex, 1);
+        // RTP tugmalarini Skrinshotga o'xshatish
+        function setAdminMode(mode) {
+            systemAlgMode = mode;
+            let normalClass = "bg-[#d97706] text-white text-xs font-bold py-3 rounded-xl border border-[#b45309] shadow-lg shadow-amber-600/20";
+            let passiveClass = "bg-slate-800/80 text-slate-400 text-xs font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700";
+
+            ['low', 'normal', 'high'].forEach(m => {
+                document.getElementById('mode-' + m).className = passiveClass;
+            });
+
+            if(mode === 'normal') { document.getElementById('mode-normal').className = normalClass; }
+            else if(mode === 'low') { document.getElementById('mode-low').className = normalClass.replace('#d97706', 'red-700').replace('#b45309', 'red-800'); }
+            else if(mode === 'high') { document.getElementById('mode-high').className = normalClass.replace('#d97706', 'green-600').replace('#b45309', 'green-700'); }
         }
-        app.saveState();
-        app.refreshGlobalMetrics();
-        app.buildTabContent(app.currentTab);
-    },
 
-    removeListing(id) {
-        if (confirm("Ushbu raqamli e'lonni butunlay o'chirib tashlamoqchimisiz?")) {
-            app.db.listings = app.db.listings.filter(l => l.id !== id);
-            app.saveState();
-            app.refreshGlobalMetrics();
-            app.buildTabContent(app.currentTab);
+        // --- AVIATOR GAME LOGIC & ANIMATION ---
+        function adjustBet(val) {
+            if(isPlaying || isBetPlaced) return;
+            let current = parseInt(document.getElementById('bet-amount').value) || 0;
+            document.getElementById('bet-amount').value = current + val;
         }
-    },
 
-    // --- ADMIN MANTIQLARI ---
-    admModifyWallet() {
-        const target = document.getElementById('adm-target-user').value.toLowerCase().trim();
-        const cash = parseInt(document.getElementById('adm-amount').value);
+        function handleBetAction() {
+            let betAmt = parseInt(document.getElementById('bet-amount').value) || 0;
+            if(betAmt < 1000) { alert("Minimal tikish 1,000 UZS"); return; }
 
-        if(!app.db.users[target]) { alert("Bunday foydalanuvchi tizimda topilmadi!"); return; }
-        if(isNaN(cash)) { alert("Iltimos, coin miqdorini raqamda kiriting!"); return; }
+            if (!isBetPlaced && !isPlaying) {
+                if (userData.balance < betAmt) {
+                    alert("Balansda yetarli mablag' mavjud emas! Admindan pul so'rang.");
+                    return;
+                }
+                userData.balance -= betAmt;
+                updateBalanceUI();
+                isBetPlaced = true;
 
-        app.db.users[target].balance += cash;
-        app.saveState();
-        app.refreshGlobalMetrics();
-        app.buildTabContent('admin');
-        alert(`@${target} foydalanuvchi balansi muvaffaqiyatli yangilandi!`);
-    },
+                let btn = document.getElementById('main-bet-btn');
+                btn.className = "w-full bg-amber-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-amber-600/20 transition-all text-center flex flex-col items-center justify-center animate-pulse";
+                document.getElementById('btn-primary-text').innerText = "KUTILMOQDA...";
+                document.getElementById('btn-sub-text').innerText = "Keyingi parvozga tayyorlanmoqda";
+                
+                setTimeout(launchPlane, 2000);
+            } else if (isPlaying) {
+                // Cashout
+                isPlaying = false;
+                let winnings = Math.floor(betAmt * currentMultiplier);
+                userData.balance += winnings;
+                updateBalanceUI();
 
-    admToggleBlock() {
-        const target = document.getElementById('adm-target-user').value.toLowerCase().trim();
-        if(!app.db.users[target]) { alert("Foydalanuvchi topilmadi!"); return; }
-        if(target === 'admin') { alert("Admin o'zini o'zi bloklay olmaydi!"); return; }
+                logGameHistory(betAmt, currentMultiplier, winnings, true);
+                resetFlightUI();
+            }
+        }
 
-        const currentState = app.db.users[target].isBlocked;
-        app.db.users[target].isBlocked = !currentState;
-        app.saveState();
-        alert(`@${target} holati o'zgartirildi. Blok holati: ${!currentState}`);
-    },
+        function launchPlane() {
+            if(!isBetPlaced) return;
+            isBetPlaced = false;
+            isPlaying = true;
+            currentMultiplier = 1.00;
 
-    admPublishBroadcast() {
-        const text = document.getElementById('adm-banner-msg').value.trim();
-        app.db.broadcast = text;
-        app.saveState();
-        app.refreshGlobalMetrics();
-        alert("Global xabar barcha ekranlarda e'lon qilindi!");
-    },
+            if (systemAlgMode === 'low') { crashPoint = (Math.random() * (1.30 - 1.01) + 1.01); } 
+            else if (systemAlgMode === 'high') { crashPoint = (Math.random() * (15.00 - 3.00) + 3.00); } 
+            else { crashPoint = Math.random() < 0.6 ? (Math.random() * (2.10 - 1.05) + 1.05) : (Math.random() * (8.90 - 2.10) + 2.10); }
 
-    // --- MAVZULAR BILAN ISHLASH ---
-    updateTheme(themeName) {
-        app.db.users[app.currentUser].theme = themeName;
-        app.saveState();
-        app.applySelectedTheme(themeName);
-    },
+            let btn = document.getElementById('main-bet-btn');
+            btn.className = "w-full bg-green-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/20 transition-all text-center flex flex-col items-center justify-center";
+            document.getElementById('btn-primary-text').innerText = "CASH OUT";
+            document.getElementById('game-status-text').classList.remove('hidden');
 
-    applySelectedTheme(themeName) {
-        document.documentElement.setAttribute('data-theme', themeName);
-    }
-};
+            const plane = document.getElementById('plane-element');
+            const trail = document.getElementById('flight-trail');
+            plane.style.opacity = '1';
+            trail.style.opacity = '1';
 
-// Ilovani xavfsiz yuklash buyrug'i
-document.addEventListener('DOMContentLoaded', app.init);
-</script>
+            gameInterval = setInterval(() => {
+                if (currentMultiplier >= crashPoint) {
+                    clearInterval(gameInterval);
+                    if (isPlaying) {
+                        logGameHistory(parseInt(document.getElementById('bet-amount').value), currentMultiplier, 0, false);
+                        document.getElementById('live-multiplier').innerText = currentMultiplier.toFixed(2) + "x";
+                        document.getElementById('live-multiplier').className = "text-6xl font-black text-red-600 font-digital drop-shadow-xl scale-110 transition-transform";
+                        document.getElementById('game-status-text').innerText = "UCHIB KETDI!";
+                        document.getElementById('game-status-text').classList.remove('text-red-500', 'animate-pulse');
+                        document.getElementById('game-status-text').classList.add('text-red-600');
+                        plane.style.opacity = '0'; // crashed
+                        isPlaying = false;
+                    }
+                    setTimeout(resetFlightUI, 2500);
+                    return;
+                }
+
+                currentMultiplier += currentMultiplier * 0.012 + 0.005;
+                document.getElementById('live-multiplier').innerText = currentMultiplier.toFixed(2) + 'x';
+                
+                let bAmt = parseInt(document.getElementById('bet-amount').value) || 0;
+                document.getElementById('btn-sub-text').innerText = "Yutuq: " + Math.floor(bAmt * currentMultiplier).toLocaleString() + " UZS";
+
+                // ANIMATSIYA: O'ngga va Tepaga qiyshiq uchish trayektoriyasi
+                let progress = currentMultiplier - 1; // 0 dan boshlanadi
+                let xPos = Math.min(10 + progress * 25, 80); // O'ng tarafga (max 80%)
+                let yPos = Math.min(10 + Math.pow(progress, 1.2) * 15, 70); // Tepaga curve bo'lib ko'tariladi
+                let angle = Math.min(progress * 15, 45); // Burunni ko'tarish
+
+                plane.style.left = xPos + '%';
+                plane.style.bottom = yPos + '%';
+                plane.style.transform = `rotate(-${angle}deg)`;
+
+                // Orqasidagi qizil chiziq (Trail)
+                trail.style.width = (xPos + 5) + '%';
+                trail.style.height = (yPos + 5) + '%';
+
+            }, 80);
+        }
+
+        function resetFlightUI() {
+            clearInterval(gameInterval);
+            isPlaying = false; isBetPlaced = false;
+
+            if(currentMultiplier > 1.01 && !document.getElementById('game-status-text').innerText.includes("UCHIB")) {
+                const ribbon = document.getElementById('history-badges');
+                const span = document.createElement('span');
+                span.className = currentMultiplier >= 5 ? "bg-red-950 text-red-400 border border-red-900 px-2 py-0.5 rounded" : "bg-slate-800 text-slate-400 px-2 py-0.5 rounded";
+                span.innerText = currentMultiplier.toFixed(2) + 'x';
+                ribbon.insertBefore(span, ribbon.firstChild);
+            }
+
+            document.getElementById('live-multiplier').className = "text-6xl font-black text-white tracking-tight font-digital drop-shadow-xl scale-100 transition-transform";
+            document.getElementById('live-multiplier').innerText = "1.00x";
+            
+            let statusText = document.getElementById('game-status-text');
+            statusText.classList.add('hidden');
+            statusText.innerText = "SAMOLYOT UCHMOQDA...";
+            statusText.className = "text-xs text-red-500 uppercase font-bold tracking-widest mt-2 hidden animate-pulse";
+
+            let btn = document.getElementById('main-bet-btn');
+            btn.className = "w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-600/20 transition-all text-center flex flex-col items-center justify-center";
+            document.getElementById('btn-primary-text').innerText = "TIKISH KIRITISH";
+            document.getElementById('btn-sub-text').innerText = "Parvoz startini kuting";
+
+            const plane = document.getElementById('plane-element');
+            const trail = document.getElementById('flight-trail');
+            plane.style.opacity = '0'; plane.style.bottom = '10%'; plane.style.left = '10%'; plane.style.transform = 'rotate(0deg)';
+            trail.style.opacity = '0'; trail.style.width = '0%'; trail.style.height = '0%';
+        }
+
+        function logGameHistory(bet, mult, win, isWin) {
+            const container = document.getElementById('bets-history-list');
+            if(container.innerHTML.includes("Hozircha ma'lumotlar")) container.innerHTML = '';
+            
+            const div = document.createElement('div');
+            div.className = "py-3 flex justify-between items-center text-xs";
+            div.innerHTML = `
+                <div>
+                    <p class="font-bold text-white">${bet.toLocaleString()} UZS</p>
+                    <p class="text-[10px] text-slate-500">Hozirgina</p>
+                </div>
+                ${isWin ? `<span class="text-green-500 font-bold bg-green-500/10 px-2 py-1 rounded border border-green-500/20">+${win.toLocaleString()} UZS (${mult.toFixed(2)}x)</span>` : `<span class="text-red-500 font-bold bg-red-500/10 px-2 py-1 rounded border border-red-500/20">Uchib ketdi (${mult.toFixed(2)}x)</span>`}
+            `;
+            container.insertBefore(div, container.firstChild);
+        }
+
+        function openDepositModal() { document.getElementById('deposit-modal').classList.remove('hidden'); }
+        function closeDepositModal() { document.getElementById('deposit-modal').classList.add('hidden'); }
+        function handleWithdrawal() { alert("Yechish so'rovi yuborildi. Tekshirish uchun bot adminiga yozing: @smart_gemini"); }
+    </script>
 </body>
 </html>
